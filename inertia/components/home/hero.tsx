@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   Container,
+  Flex,
   Group,
   Paper,
   Stack,
@@ -21,14 +22,15 @@ import {
 export default function HomeHero() {
   return (
     <Box
-      py={{ base: 48, md: 72 }}
+      py={{ base: 60, sm: 76, md: 92 }}
+      px={{ base: 'md', sm: 'lg' }}
       style={{
         borderBottom: '1px solid var(--mantine-color-coffee-2)',
         background:
           'linear-gradient(180deg, rgba(253, 250, 247, 1) 0%, rgba(245, 237, 228, 0.45) 100%)',
       }}
     >
-      <Container size="lg">
+      <Container size="lg" px={{ base: 'md', sm: 'lg' }}>
         <Stack align="center" gap="md" ta="center" maw={820} mx="auto">
           <Badge
             variant="outline"
@@ -51,24 +53,31 @@ export default function HomeHero() {
             order={1}
             c="coffee.9"
             style={{
-              fontSize: 'clamp(2.2rem, 5vw, 3.4rem)',
-              lineHeight: 1.15,
+              fontSize: 'clamp(1.75rem, 6vw, 3.4rem)',
+              lineHeight: 1.18,
               fontWeight: 700,
+              wordBreak: 'break-word',
             }}
           >
             Honest coffee beans, roasted slow and shipped fresh.
           </Title>
 
-          <Text size="lg" c="coffee.8" maw={640} style={{ lineHeight: 1.6 }}>
+          <Text
+            size="md"
+            c="coffee.8"
+            maw={640}
+            style={{ lineHeight: 1.6 }}
+            fz={{ base: 'sm', sm: 'md', md: 'lg' }}
+          >
             Direct-trade single origins and seasonal roastery blends. We fire up our drum roaster
             every Tuesday and Thursday so your beans land on your doorstep right inside their peak
             flavor window.
           </Text>
 
           {/* Practical Roastery Highlights */}
-          <Group gap="xs" mt="sm" justify="center" wrap="wrap">
+          <Group gap={6} mt="xs" justify="center" wrap="wrap">
             <Paper
-              px="md"
+              px={{ base: 'xs', sm: 'md' }}
               py={6}
               radius="xl"
               bg="white"
@@ -88,7 +97,7 @@ export default function HomeHero() {
             </Paper>
 
             <Paper
-              px="md"
+              px={{ base: 'xs', sm: 'md' }}
               py={6}
               radius="xl"
               bg="white"
@@ -108,7 +117,7 @@ export default function HomeHero() {
             </Paper>
 
             <Paper
-              px="md"
+              px={{ base: 'xs', sm: 'md' }}
               py={6}
               radius="xl"
               bg="white"
@@ -128,11 +137,18 @@ export default function HomeHero() {
             </Paper>
           </Group>
 
-          <Group gap="md" mt="md">
+          <Flex
+            direction={{ base: 'column', sm: 'row' }}
+            gap="sm"
+            mt="md"
+            w={{ base: '100%', sm: 'auto' }}
+            justify="center"
+          >
             <Button
               size="md"
               color="coffee"
               radius="md"
+              w={{ base: '100%', sm: 'auto' }}
               rightSection={<IconArrowRight size={16} />}
               onClick={() => {
                 document.getElementById('coffee-menu')?.scrollIntoView({ behavior: 'smooth' })
@@ -145,6 +161,7 @@ export default function HomeHero() {
               variant="default"
               radius="md"
               color="coffee"
+              w={{ base: '100%', sm: 'auto' }}
               onClick={() => {
                 document.getElementById('brew-guide')?.scrollIntoView({ behavior: 'smooth' })
               }}
@@ -156,7 +173,7 @@ export default function HomeHero() {
             >
               Brew & Grind Guide
             </Button>
-          </Group>
+          </Flex>
         </Stack>
       </Container>
     </Box>

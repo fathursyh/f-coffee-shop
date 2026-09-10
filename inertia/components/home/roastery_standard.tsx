@@ -3,9 +3,9 @@ import { IconFlame, IconLeaf, IconScale } from '@tabler/icons-react'
 
 export default function RoasteryStandard() {
   return (
-    <Container size="xl" pt={64}>
+    <Container size="xl" py={{ base: 64, sm: 80, md: 96 }} px={{ base: 'md', sm: 'lg' }}>
       <Paper
-        p={{ base: 'lg', md: 'xl' }}
+        p={{ base: 'xl', sm: 36, md: 48 }}
         radius="lg"
         bg="white"
         style={{
@@ -24,16 +24,21 @@ export default function RoasteryStandard() {
             >
               Craft & Transparency
             </Text>
-            <Title order={2} c="coffee.9" mt={4} style={{ fontSize: '1.8rem' }}>
+            <Title
+              order={2}
+              c="coffee.9"
+              mt={4}
+              fz={{ base: '1.4rem', sm: '1.7rem', md: '1.8rem' }}
+            >
               Why ordering beans from a micro-roastery matters
             </Title>
-            <Text size="sm" c="coffee.7" mt={4}>
+            <Text size="sm" c="coffee.7" mt={4} fz={{ base: 'xs', sm: 'sm' }}>
               Industrial supermarket coffee sits in cargo holds for months. Here is what we do
               differently for your morning brew.
             </Text>
           </div>
 
-          <SimpleGrid cols={{ base: 1, md: 3 }} spacing="xl">
+          <SimpleGrid cols={{ base: 1, md: 3 }} spacing={{ base: 'lg', md: 'xl' }}>
             <Stack gap="xs">
               <ThemeIcon size={42} radius="md" color="coffee" variant="light">
                 <IconLeaf size={22} />
@@ -56,9 +61,8 @@ export default function RoasteryStandard() {
                 Drum-Roasted in Small Batches
               </Title>
               <Text size="xs" c="coffee.8" style={{ lineHeight: 1.6 }}>
-                Every lot is test-cupped and roasted on a cast-iron Diedrich drum roaster. We
-                tailor flame temperature and airflow to elevate the natural sweetness of each
-                harvest.
+                Every lot is test-cupped and roasted on a cast-iron Diedrich drum roaster. We tailor
+                flame temperature and airflow to elevate the natural sweetness of each harvest.
               </Text>
             </Stack>
 

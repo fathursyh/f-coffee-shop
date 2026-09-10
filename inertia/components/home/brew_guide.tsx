@@ -29,32 +29,31 @@ export default function BrewGuide() {
   ]
 
   return (
-    <Container size="xl" pt={64} id="brew-guide">
-      <Stack gap="lg">
+    <Container
+      size="xl"
+      py={{ base: 64, sm: 80, md: 96 }}
+      px={{ base: 'md', sm: 'lg' }}
+      id="brew-guide"
+    >
+      <Stack gap="xl">
         <Box>
-          <Text
-            size="xs"
-            fw={700}
-            c="coffee.6"
-            tt="uppercase"
-            style={{ letterSpacing: '0.08em' }}
-          >
+          <Text size="xs" fw={700} c="coffee.6" tt="uppercase" style={{ letterSpacing: '0.08em' }}>
             Home Barista Companion
           </Text>
-          <Title order={2} c="coffee.9" style={{ fontSize: '1.8rem' }}>
+          <Title order={2} c="coffee.9" fz={{ base: '1.4rem', sm: '1.7rem', md: '1.8rem' }}>
             Grind Size & Brewing Ratio Guide
           </Title>
-          <Text size="sm" c="coffee.7">
-            Not sure which grind to select for your kitchen setup? Here is our roaster's cheat
+          <Text size="sm" c="coffee.7" fz={{ base: 'xs', sm: 'sm' }} mt={4}>
+            Not sure which grind to select for your kitchen setup? Here is our roaster&apos;s cheat
             sheet.
           </Text>
         </Box>
 
-        <SimpleGrid cols={{ base: 1, sm: 2, lg: 4 }} spacing="md">
+        <SimpleGrid cols={{ base: 1, sm: 2, lg: 4 }} spacing={{ base: 'md', sm: 'lg' }}>
           {brewGuides.map((guide) => (
             <Paper
               key={guide.title}
-              p="md"
+              p={{ base: 'lg', sm: 'md' }}
               radius="md"
               bg="white"
               style={{

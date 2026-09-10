@@ -1,7 +1,10 @@
+import type { CoffeeAttributes } from '#models/coffee'
+import { usePage } from '@inertiajs/react'
 import {
   ActionIcon,
   Badge,
   Box,
+  Button,
   Card,
   Container,
   Divider,
@@ -26,11 +29,53 @@ export const GRIND_OPTIONS = [
   { value: 'french-press', label: 'French Press & Cold Brew (Coarse)' },
 ]
 
+export type RoastType = 'Light' | 'Medium-Light' | 'Medium' | 'Medium-Dark' | 'Dark' | string
+
+export interface CoffeeBean extends Partial<CoffeeAttributes> {
+  id: string
+  name: string
+  origin: string
+  subregion: string | null
+  elevation: string | null
+  process: string | null
+  roast: RoastType
+  roastLevel: number
+  tastingNotes: string[]
+  description: string | null
+  bestFor: string | null
+  basePrice250G: number
+  basePrice250g?: number
+  badge?: string | null
+}
+
+export interface CartItem {
+  id: string
+  coffeeId: string
+  name: string
+  origin: string
+  roast: RoastType
+  weight: '250g' | '500g' | '1kg'
+  grind: string
+  price: number
+  quantity: number
+}
+
+export interface BeanSelection {
+  weight: '250g' | '500g' | '1kg'
+  grind: string
+  quantity: number
+}
+
 interface OrderCatalogProps {
   onAddToCart: (bean: CoffeeBean, selection: BeanSelection) => void
 }
 
+type CatalogInertiaProps = {
+  coffee: CoffeeBean[]
+}
+
 export default function OrderCatalog({ onAddToCart }: OrderCatalogProps) {
+  const { coffee = [] } = usePage<CatalogInertiaProps>().props
   const [selectedRoastFilter, setSelectedRoastFilter] = useState<string>('all')
 
   const [beanSelections, setBeanSelections] = useState<
@@ -100,19 +145,24 @@ export default function OrderCatalog({ onAddToCart }: OrderCatalogProps) {
   }
 
   const filteredBeans = useMemo(() => {
-    if (selectedRoastFilter === 'all') return COFFEE_BEANS
+    if (selectedRoastFilter === 'all') return coffee
     if (selectedRoastFilter === 'light')
-      return COFFEE_BEANS.filter((b) => b.roast === 'Light' || b.roast === 'Medium-Light')
-    if (selectedRoastFilter === 'medium') return COFFEE_BEANS.filter((b) => b.roast === 'Medium')
+      return coffee.filter((b) => b.roast === 'Light' || b.roast === 'Medium-Light')
+    if (selectedRoastFilter === 'medium') return coffee.filter((b) => b.roast === 'Medium')
     if (selectedRoastFilter === 'dark')
-      return COFFEE_BEANS.filter((b) => b.roast === 'Medium-Dark' || b.roast === 'Dark')
+      return coffee.filter((b) => b.roast === 'Medium-Dark' || b.roast === 'Dark')
     if (selectedRoastFilter === 'single-origin')
-      return COFFEE_BEANS.filter((b) => !b.name.includes('Blend'))
-    return COFFEE_BEANS
-  }, [selectedRoastFilter])
+      return coffee.filter((b) => !b.name.includes('Blend'))
+    return coffee
+  }, [coffee, selectedRoastFilter])
 
   return (
-    <Container size="xl" pt={48} id="coffee-menu">
+    <Container
+      size="xl"
+      py={{ base: 64, sm: 80, md: 96 }}
+      px={{ base: 'md', sm: 'lg' }}
+      id="coffee-menu"
+    >
       <Stack gap="xl">
         {/* Header & Filter Row */}
         <Flex
@@ -133,56 +183,68 @@ export default function OrderCatalog({ onAddToCart }: OrderCatalogProps) {
                 This Week’s Batch
               </Text>
             </Group>
-            <Title order={2} c="coffee.9" style={{ fontSize: '1.9rem' }}>
+            <Title order={2} c="coffee.9" fz={{ base: '1.45rem', sm: '1.75rem', md: '1.9rem' }}>
               Order Fresh Whole Bean or Custom Grind
             </Title>
-            <Text size="sm" c="coffee.7" mt={4}>
+            <Text size="sm" c="coffee.7" mt={4} fz={{ base: 'xs', sm: 'sm' }}>
               Select your preferred pouch weight and brewing method. We grind fresh on an EK43 right
               before packing.
             </Text>
           </Box>
 
           {/* Filter Pills */}
-          <SegmentedControl
-            value={selectedRoastFilter}
-            onChange={setSelectedRoastFilter}
-            color="coffee"
-            radius="md"
-            size="xs"
-            data={[
-              { label: 'All Beans (6)', value: 'all' },
-              { label: 'Light & Fruity', value: 'light' },
-              { label: 'Medium & Sweet', value: 'medium' },
-              { label: 'Dark & Bold', value: 'dark' },
-              { label: 'Single Origin', value: 'single-origin' },
-            ]}
-            styles={{
-              root: {
-                backgroundColor: 'white',
-                border: '1px solid var(--mantine-color-coffee-2)',
-                padding: 3,
-              },
-              indicator: {
-                backgroundColor: 'var(--mantine-color-coffee-7)',
-              },
+          <Box
+            w={{ base: '100%', md: 'auto' }}
+            style={{
+              overflowX: 'auto',
+              maxWidth: '100%',
+              WebkitOverflowScrolling: 'touch',
             }}
-          />
+          >
+            <SegmentedControl
+              value={selectedRoastFilter}
+              onChange={setSelectedRoastFilter}
+              color="coffee"
+              radius="md"
+              size="xs"
+              data={[
+                { label: 'All Beans (6)', value: 'all' },
+                { label: 'Light & Fruity', value: 'light' },
+                { label: 'Medium & Sweet', value: 'medium' },
+                { label: 'Dark & Bold', value: 'dark' },
+                { label: 'Single Origin', value: 'single-origin' },
+              ]}
+              styles={{
+                root: {
+                  backgroundColor: 'white',
+                  border: '1px solid var(--mantine-color-coffee-2)',
+                  padding: 3,
+                  minWidth: 'max-content',
+                },
+                indicator: {
+                  backgroundColor: 'var(--mantine-color-coffee-7)',
+                },
+              }}
+            />
+          </Box>
         </Flex>
 
         {/* Coffee Cards Grid */}
-        <SimpleGrid cols={{ base: 1, md: 2, lg: 3 }} spacing="lg">
+        <SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }} spacing={{ base: 'lg', md: 'xl' }}>
           {filteredBeans.map((bean) => {
             const selection = beanSelections[bean.id] || {
               weight: '250g',
               grind: 'whole-bean',
               quantity: 1,
             }
-            const currentPrice = getBeanPrice(bean.basePrice250g, selection.weight)
+            const basePrice = Number(bean.basePrice250G ?? bean.basePrice250g ?? 0)
+            const currentPrice = getBeanPrice(basePrice, selection.weight)
+            const tastingNotesList = Array.isArray(bean.tastingNotes) ? bean.tastingNotes : []
 
             return (
               <Card
                 key={bean.id}
-                padding="lg"
+                padding="md"
                 radius="lg"
                 bg="white"
                 style={{
@@ -224,11 +286,12 @@ export default function OrderCatalog({ onAddToCart }: OrderCatalogProps) {
 
                   {/* Title & Origin */}
                   <Box mt={4}>
-                    <Title order={3} c="coffee.9" style={{ fontSize: '1.35rem', lineHeight: 1.25 }}>
+                    <Title order={3} c="coffee.9" style={{ fontSize: '1.25rem', lineHeight: 1.25 }}>
                       {bean.name}
                     </Title>
                     <Text size="xs" fw={600} c="coffee.6" mt={2}>
-                      {bean.subregion} · {bean.origin}
+                      {bean.subregion ? `${bean.subregion} · ` : ''}
+                      {bean.origin}
                     </Text>
                   </Box>
 
@@ -242,34 +305,42 @@ export default function OrderCatalog({ onAddToCart }: OrderCatalogProps) {
                       boxShadow: 'none',
                     }}
                   >
-                    <Group gap="xs" justify="space-between">
+                    <SimpleGrid cols={3} spacing={4}>
                       <Box>
                         <Text size="10px" c="dimmed" tt="uppercase" fw={700}>
                           Elevation
                         </Text>
-                        <Text size="xs" fw={600} c="coffee.8">
-                          {bean.elevation}
+                        <Text size="xs" fw={600} c="coffee.8" truncate>
+                          {bean.elevation || 'N/A'}
                         </Text>
                       </Box>
-                      <Divider orientation="vertical" />
-                      <Box>
+                      <Box
+                        style={{
+                          borderLeft: '1px solid var(--mantine-color-coffee-2)',
+                          paddingLeft: 6,
+                        }}
+                      >
                         <Text size="10px" c="dimmed" tt="uppercase" fw={700}>
                           Process
                         </Text>
-                        <Text size="xs" fw={600} c="coffee.8" truncate maw={130}>
-                          {bean.process}
+                        <Text size="xs" fw={600} c="coffee.8" truncate>
+                          {bean.process || 'N/A'}
                         </Text>
                       </Box>
-                      <Divider orientation="vertical" />
-                      <Box>
+                      <Box
+                        style={{
+                          borderLeft: '1px solid var(--mantine-color-coffee-2)',
+                          paddingLeft: 6,
+                        }}
+                      >
                         <Text size="10px" c="dimmed" tt="uppercase" fw={700}>
                           Best Brew
                         </Text>
-                        <Text size="xs" fw={600} c="coffee.8" truncate maw={90}>
-                          {bean.bestFor.split(',')[0]}
+                        <Text size="xs" fw={600} c="coffee.8" truncate>
+                          {bean.bestFor?.split(',')[0] || 'Any'}
                         </Text>
                       </Box>
-                    </Group>
+                    </SimpleGrid>
                   </Paper>
 
                   {/* Description */}
@@ -283,7 +354,7 @@ export default function OrderCatalog({ onAddToCart }: OrderCatalogProps) {
                       Tasting Notes:
                     </Text>
                     <Group gap={5} wrap="wrap">
-                      {bean.tastingNotes.map((note) => (
+                      {tastingNotesList.map((note) => (
                         <Badge
                           key={note}
                           variant="outline"
@@ -332,9 +403,9 @@ export default function OrderCatalog({ onAddToCart }: OrderCatalogProps) {
                           handleWeightChange(bean.id, val as '250g' | '500g' | '1kg')
                         }
                         data={[
-                          { label: '250g Standard', value: '250g' },
-                          { label: '500g Value', value: '500g' },
-                          { label: '1kg Bulk', value: '1kg' },
+                          { label: '250g', value: '250g' },
+                          { label: '500g (-6%)', value: '500g' },
+                          { label: '1kg (-12%)', value: '1kg' },
                         ]}
                         styles={{
                           root: {
@@ -372,7 +443,7 @@ export default function OrderCatalog({ onAddToCart }: OrderCatalogProps) {
                 {/* Card Bottom: Price & Add to Cart */}
                 <Box mt="md">
                   <Divider my="xs" color="coffee.1" />
-                  <Group justify="space-between" align="center">
+                  <Group justify="space-between" align="center" wrap="wrap" gap="xs">
                     <Box>
                       <Text size="xs" c="dimmed">
                         Subtotal
@@ -382,7 +453,7 @@ export default function OrderCatalog({ onAddToCart }: OrderCatalogProps) {
                       </Text>
                     </Box>
 
-                    <Group gap={6}>
+                    <Group gap={8} align="center">
                       {/* Quantity controls */}
                       <Group
                         gap={2}
@@ -394,41 +465,49 @@ export default function OrderCatalog({ onAddToCart }: OrderCatalogProps) {
                         }}
                       >
                         <ActionIcon
-                          size="xs"
+                          size="sm"
                           variant="subtle"
                           color="coffee"
                           onClick={() => handleQuantityChange(bean.id, -1)}
                           disabled={selection.quantity <= 1}
+                          aria-label="Decrease quantity"
                         >
-                          <IconMinus size={12} />
+                          <IconMinus size={14} />
                         </ActionIcon>
-                        <Text size="xs" fw={600} c="coffee.9" px={4}>
+                        <Text
+                          size="xs"
+                          fw={700}
+                          c="coffee.9"
+                          px={4}
+                          style={{ minWidth: 18, textAlign: 'center' }}
+                        >
                           {selection.quantity}
                         </Text>
                         <ActionIcon
-                          size="xs"
+                          size="sm"
                           variant="subtle"
                           color="coffee"
                           onClick={() => handleQuantityChange(bean.id, 1)}
+                          aria-label="Increase quantity"
                         >
-                          <IconPlus size={12} />
+                          <IconPlus size={14} />
                         </ActionIcon>
                       </Group>
 
-                      <Box
-                        px={12}
-                        py={6}
-                        style={{
-                          backgroundColor: 'var(--mantine-color-coffee-7)',
-                          cursor: 'pointer',
-                          userSelect: 'none',
-                        }}
+                      <Button
+                        size="xs"
+                        color="coffee"
+                        radius="md"
                         onClick={() => handleAddToCartClick(bean)}
+                        leftSection={<IconPlus size={14} />}
+                        style={{
+                          height: 32,
+                          fontWeight: 700,
+                          backgroundColor: 'var(--mantine-color-coffee-7)',
+                        }}
                       >
-                        <Text size="xs" fw={700} c="white">
-                          Add
-                        </Text>
-                      </Box>
+                        Add to Bag
+                      </Button>
                     </Group>
                   </Group>
                 </Box>
@@ -440,137 +519,3 @@ export default function OrderCatalog({ onAddToCart }: OrderCatalogProps) {
     </Container>
   )
 }
-
-export type RoastType = 'Light' | 'Medium-Light' | 'Medium' | 'Medium-Dark' | 'Dark'
-
-export interface CoffeeBean {
-  id: string
-  name: string
-  origin: string
-  subregion: string
-  elevation: string
-  process: string
-  roast: RoastType
-  roastLevel: number
-  tastingNotes: string[]
-  description: string
-  bestFor: string
-  basePrice250g: number
-  badge?: string
-}
-
-export interface CartItem {
-  id: string
-  coffeeId: string
-  name: string
-  origin: string
-  roast: RoastType
-  weight: '250g' | '500g' | '1kg'
-  grind: string
-  price: number
-  quantity: number
-}
-
-export interface BeanSelection {
-  weight: '250g' | '500g' | '1kg'
-  grind: string
-  quantity: number
-}
-
-export const COFFEE_BEANS: CoffeeBean[] = [
-  {
-    id: 'guji-highland-flora',
-    name: 'Guji Highland Flora',
-    origin: 'Ethiopia',
-    subregion: 'Uraga, Guji Zone',
-    elevation: '2,150 MASL',
-    process: 'Natural / Slow Sun-Dried',
-    roast: 'Light',
-    roastLevel: 1.5,
-    tastingNotes: ['Bergamot', 'Wild Peach', 'Jasmine Blossom', 'Orange Blossom Honey'],
-    description:
-      'Silky, tea-like clarity with floral sweetness and lingering nectarine juiciness. Handpicked heirloom varietals grown by smallholders in dense shade.',
-    bestFor: 'V60, Chemex, Aeropress',
-    basePrice250g: 19.5,
-    badge: "Roaster's Pick",
-  },
-  {
-    id: 'finca-la-esperanza',
-    name: 'Finca La Esperanza',
-    origin: 'Colombia',
-    subregion: 'San Adolfo, Huila',
-    elevation: '1,780 MASL',
-    process: 'Honey Process / Caturra',
-    roast: 'Medium-Light',
-    roastLevel: 2.5,
-    tastingNotes: ['Milk Chocolate', 'Red Gala Apple', 'Toasted Almond', 'Cane Sugar'],
-    description:
-      'The quintessential comfort cup with a bright, crisp apple acidity balanced by warm panela sugar and milk chocolate body.',
-    bestFor: 'Pour Over, Drip, Flat White',
-    basePrice250g: 18.0,
-    badge: 'Seasonal Lot',
-  },
-  {
-    id: 'antigua-los-volcanes',
-    name: 'Antigua Los Volcanes',
-    origin: 'Guatemala',
-    subregion: 'Sacatepéquez Valley',
-    elevation: '1,650 MASL',
-    process: 'Fully Washed / Bourbon',
-    roast: 'Medium',
-    roastLevel: 3,
-    tastingNotes: ['Spiced Caramel', 'Candied Orange', 'Dark Cocoa', 'Pecan'],
-    description:
-      'Grown in rich volcanic mineral soil beneath Agua and Fuego volcanoes. Round mouthfeel, sweet citrus aromatics, and a warm caramel finish.',
-    bestFor: 'French Press, Moka Pot, Drip',
-    basePrice250g: 17.5,
-    badge: 'Everyday Classic',
-  },
-  {
-    id: 'sumatra-gayo-mountain',
-    name: 'Sumatra Gayo Highlands',
-    origin: 'Indonesia',
-    subregion: 'Takengon, Aceh',
-    elevation: '1,500 MASL',
-    process: 'Traditional Wet-Hulled (Giling Basah)',
-    roast: 'Medium-Dark',
-    roastLevel: 4,
-    tastingNotes: ['Dark Forest Honey', 'Cedarwood', 'Baking Spice', 'Cacao Nibs'],
-    description:
-      'Deep, syrupy, and exceptionally low in perceived acidity. Cultivated by organic smallholders under native shade trees in northern Sumatra.',
-    bestFor: 'French Press, Cold Brew, Espresso',
-    basePrice250g: 18.5,
-  },
-  {
-    id: 'hearthstone-house-blend',
-    name: 'Hearthstone Espresso Blend',
-    origin: 'Brazil & Ethiopia Blend',
-    subregion: 'Cerrado Mineiro & Sidama',
-    elevation: '1,100 - 1,900 MASL',
-    process: 'Pulped Natural & Washed',
-    roast: 'Dark',
-    roastLevel: 4.5,
-    tastingNotes: ['Fudge Truffle', 'Dark Molasses', 'Roasted Hazelnut', 'Warm Crema'],
-    description:
-      'Our house cornerstone blend. Formulated to slice through steamed milk with velvety cocoa density, or yield thick, viscous straight shots.',
-    bestFor: 'Espresso Machine, Moka Pot, Cold Brew',
-    basePrice250g: 16.5,
-    badge: 'Flagship Blend',
-  },
-  {
-    id: 'cauca-sugarcane-decaf',
-    name: 'Cauca Valley Nightcap Decaf',
-    origin: 'Colombia',
-    subregion: 'Inzá, Cauca',
-    elevation: '1,700 MASL',
-    process: 'EA Sugarcane Natural Decaf',
-    roast: 'Medium',
-    roastLevel: 3,
-    tastingNotes: ['Brown Sugar', 'Graham Cracker', 'Red Cherry', 'Malted Toffee'],
-    description:
-      'Naturally decaffeinated using fermented molasses from local Colombian sugarcane. Retains 100% of the origin terroir with none of the late-night jitters.',
-    bestFor: 'Any Brewing Method',
-    basePrice250g: 18.0,
-    badge: 'Caffeine-Free',
-  },
-]

@@ -14,18 +14,32 @@ import CupGuarantee from '~/components/home/cup_guarantee'
 import CartBar from '~/components/home/cart_bar'
 import OrderDrawer from '~/components/home/order_drawer'
 
+export const getBeanPrice = (basePrice: number = 0, weight: '250g' | '500g' | '1kg'): number => {
+  switch (weight) {
+    case '500g':
+      return +(basePrice * 1.88).toFixed(2)
+    case '1kg':
+      return +(basePrice * 3.5).toFixed(2)
+    default:
+      return +basePrice.toFixed(2)
+  }
+}
+
 export default function Home() {
   const [cart, setCart] = useState<CartItem[]>([])
   const [drawerOpened, setDrawerOpened] = useState<boolean>(false)
 
   const totalCartCount = useMemo(() => cart.reduce((acc, item) => acc + item.quantity, 0), [cart])
+
   const cartSubtotal = useMemo(
     () => cart.reduce((acc, item) => acc + item.price * item.quantity, 0),
     [cart]
   )
 
   const handleAddToCart = (bean: CoffeeBean, selection: BeanSelection) => {
-    const unitPrice = getBeanPrice(bean.basePrice250g, selection.weight)
+    // Safely extract price from either basePrice250G or basePrice250g
+    const basePrice = Number(bean.basePrice250G ?? bean.basePrice250g ?? 0)
+    const unitPrice = getBeanPrice(basePrice, selection.weight)
     const cartItemId = `${bean.id}-${selection.weight}-${selection.grind}`
 
     setCart((prev) => {
@@ -35,6 +49,10 @@ export default function Home() {
           item.id === cartItemId ? { ...item, quantity: item.quantity + selection.quantity } : item
         )
       }
+
+      const grindOption = GRIND_OPTIONS.find((g) => g.value === selection.grind)
+      const grindLabel = grindOption ? grindOption.label.split(' (')[0] : 'Whole Bean'
+
       return [
         ...prev,
         {
@@ -44,9 +62,7 @@ export default function Home() {
           origin: bean.origin,
           roast: bean.roast,
           weight: selection.weight,
-          grind:
-            GRIND_OPTIONS.find((g) => g.value === selection.grind)?.label.split(' (')[0] ||
-            'Whole Bean',
+          grind: grindLabel,
           price: unitPrice,
           quantity: selection.quantity,
         },
@@ -58,15 +74,11 @@ export default function Home() {
 
   const handleUpdateCartQuantity = (cartItemId: string, delta: number) => {
     setCart((prev) =>
-      prev
-        .map((item) => {
-          if (item.id === cartItemId) {
-            const next = item.quantity + delta
-            return next > 0 ? { ...item, quantity: next } : null
-          }
-          return item
-        })
-        .filter((item): item is CartItem => item !== null)
+      prev.flatMap((item) => {
+        if (item.id !== cartItemId) return [item]
+        const next = item.quantity + delta
+        return next > 0 ? [{ ...item, quantity: next }] : []
+      })
     )
   }
 
@@ -76,21 +88,11 @@ export default function Home() {
 
   const handleConfirmOrder = () => {
     setCart([])
-  }
-
-  const getBeanPrice = (basePrice: number, weight: '250g' | '500g' | '1kg'): number => {
-    switch (weight) {
-      case '500g':
-        return +(basePrice * 1.88).toFixed(2)
-      case '1kg':
-        return +(basePrice * 3.5).toFixed(2)
-      default:
-        return basePrice
-    }
+    setDrawerOpened(false)
   }
 
   return (
-    <Box bg="coffee.0">
+    <Box bg="coffee.0" pb={{ base: 160, sm: 120, md: 80 }}>
       {/* 1. Hero Section */}
       <HomeHero />
 

@@ -24,11 +24,20 @@ export default function Layout({ children }: { children: ReactElement<Data.Share
   const user = children.props.user
 
   return (
-    <AppShell header={{ height: 64 }}>
+    <AppShell header={{ height: { base: 60, sm: 64 } }}>
       <AppHeader user={user} />
-      <AppShell.Main bg="coffee.0">{children}</AppShell.Main>
+      <AppShell.Main
+        bg="coffee.0"
+        style={{
+          minHeight: '100dvh',
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
+        {children}
+      </AppShell.Main>
 
-      <Toaster position="bottom-right" richColors />
+      <Toaster position="top-center" richColors />
     </AppShell>
   )
 }

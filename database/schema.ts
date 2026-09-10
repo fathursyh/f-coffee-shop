@@ -7,6 +7,57 @@
 import { BaseModel, column } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
 
+export class CoffeeSchema extends BaseModel {
+  static $columns = [
+    'badge',
+    'basePrice250G',
+    'bestFor',
+    'createdAt',
+    'description',
+    'elevation',
+    'id',
+    'name',
+    'origin',
+    'process',
+    'roast',
+    'roastLevel',
+    'subregion',
+    'tastingNotes',
+    'updatedAt',
+  ] as const
+  $columns = CoffeeSchema.$columns
+  @column()
+  declare badge: string | null
+  @column()
+  declare basePrice250G: number
+  @column()
+  declare bestFor: string | null
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column()
+  declare description: string | null
+  @column()
+  declare elevation: string | null
+  @column({ isPrimary: true })
+  declare id: string
+  @column()
+  declare name: string
+  @column()
+  declare origin: string
+  @column()
+  declare process: string | null
+  @column()
+  declare roast: string
+  @column()
+  declare roastLevel: number
+  @column()
+  declare subregion: string | null
+  @column()
+  declare tastingNotes: any
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
 export class UserSchema extends BaseModel {
   static $columns = ['createdAt', 'email', 'fullName', 'id', 'password', 'updatedAt'] as const
   $columns = UserSchema.$columns

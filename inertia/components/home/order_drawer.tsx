@@ -1,6 +1,26 @@
-import { Box, Center, CloseButton, Divider, Drawer, Group, Progress, Stack, Text, ThemeIcon, Button } from '@mantine/core'
-import { IconCalendarCheck, IconCoffee, IconShoppingBag } from '@tabler/icons-react'
-import { Paper } from '@mantine/core'
+import {
+  ActionIcon,
+  Box,
+  Button,
+  Center,
+  CloseButton,
+  Divider,
+  Drawer,
+  Group,
+  Paper,
+  Progress,
+  Stack,
+  Text,
+  ThemeIcon,
+} from '@mantine/core'
+import {
+  IconCalendarCheck,
+  IconCoffee,
+  IconMinus,
+  IconPlus,
+  IconShoppingBag,
+} from '@tabler/icons-react'
+import { useMediaQuery } from '@mantine/hooks'
 import { toast } from 'sonner'
 import type { CartItem } from './order_catalog'
 
@@ -23,6 +43,7 @@ export default function OrderDrawer({
   onRemoveItem,
   onConfirmOrder,
 }: OrderDrawerProps) {
+  const isMobile = useMediaQuery('(max-width: 48em)')
   const freeShippingThreshold = 45
   const freeShippingProgress = Math.min(100, (cartSubtotal / freeShippingThreshold) * 100)
   const remainingForFreeShipping = Math.max(0, freeShippingThreshold - cartSubtotal)
@@ -35,12 +56,12 @@ export default function OrderDrawer({
       opened={opened}
       onClose={onClose}
       position="right"
-      size="md"
-      padding="lg"
+      size={isMobile ? '100%' : 'md'}
+      padding={isMobile ? 'md' : 'lg'}
       title={
         <Group gap="xs">
           <IconShoppingBag size={20} color="var(--mantine-color-coffee-7)" />
-          <Text fw={500} c="coffee.9" style={{ fontSize: '1.25rem' }}>
+          <Text fw={600} c="coffee.9" style={{ fontSize: '1.2rem' }}>
             Your Fresh Roast Order
           </Text>
         </Group>
@@ -105,7 +126,7 @@ export default function OrderDrawer({
                   Your coffee bag is empty
                 </Text>
                 <Text size="xs" c="dimmed" ta="center" maw={240}>
-                  Choose an origin above, pick your grind, and we'll roast it fresh for you.
+                  Choose an origin above, pick your grind, and we&apos;ll roast it fresh for you.
                 </Text>
               </Stack>
             </Center>
@@ -144,46 +165,52 @@ export default function OrderDrawer({
 
                   <Divider my="xs" color="coffee.1" />
 
-                  <Group justify="space-between" align="center">
-                    <Text size="sm" fw={700} c="coffee.9">
-                      ${item.price.toFixed(2)} × {item.quantity}
-                    </Text>
-                    <Text size="sm" fw={700} c="coffee.9">
-                      ${(item.price * item.quantity).toFixed(2)}
-                    </Text>
+                  <Group justify="space-between" align="center" wrap="nowrap">
+                    <Box>
+                      <Text size="xs" c="coffee.6">
+                        ${item.price.toFixed(2)} / pouch
+                      </Text>
+                      <Text size="sm" fw={700} c="coffee.9">
+                        ${(item.price * item.quantity).toFixed(2)}
+                      </Text>
+                    </Box>
 
-                    <Group gap={4}>
-                      <Box
-                        px={6}
-                        py={2}
-                        radius="md"
-                        style={{
-                          backgroundColor: 'var(--mantine-color-coffee-1)',
-                          cursor: 'pointer',
-                        }}
+                    <Group
+                      gap={2}
+                      style={{
+                        border: '1px solid var(--mantine-color-coffee-2)',
+                        borderRadius: 'var(--mantine-radius-md)',
+                        padding: '2px 4px',
+                        backgroundColor: 'var(--mantine-color-coffee-0)',
+                      }}
+                    >
+                      <ActionIcon
+                        size="sm"
+                        variant="subtle"
+                        color="coffee"
                         onClick={() => onUpdateQuantity(item.id, -1)}
+                        aria-label="Decrease quantity"
                       >
-                        <Text size="xs" fw={700} c="coffee.9">
-                          −
-                        </Text>
-                      </Box>
-                      <Text size="xs" fw={600} c="coffee.9" style={{ minWidth: '16px', textAlign: 'center' }}>
+                        <IconMinus size={14} />
+                      </ActionIcon>
+                      <Text
+                        size="xs"
+                        fw={700}
+                        c="coffee.9"
+                        px={6}
+                        style={{ minWidth: 20, textAlign: 'center' }}
+                      >
                         {item.quantity}
                       </Text>
-                      <Box
-                        px={6}
-                        py={2}
-                        radius="md"
-                        style={{
-                          backgroundColor: 'var(--mantine-color-coffee-7)',
-                          cursor: 'pointer',
-                        }}
+                      <ActionIcon
+                        size="sm"
+                        variant="subtle"
+                        color="coffee"
                         onClick={() => onUpdateQuantity(item.id, 1)}
+                        aria-label="Increase quantity"
                       >
-                        <Text size="xs" fw={700} c="white">
-                          +
-                        </Text>
-                      </Box>
+                        <IconPlus size={14} />
+                      </ActionIcon>
                     </Group>
                   </Group>
                 </Paper>
@@ -194,7 +221,11 @@ export default function OrderDrawer({
 
         {/* Drawer Bottom Checkout */}
         {cart.length > 0 && (
-          <Box pt="md" style={{ borderTop: '1px solid var(--mantine-color-coffee-2)' }}>
+          <Box
+            pt="md"
+            pb="calc(env(safe-area-inset-bottom, 0px) + 8px)"
+            style={{ borderTop: '1px solid var(--mantine-color-coffee-2)' }}
+          >
             <Stack gap="xs">
               <Group justify="space-between">
                 <Text size="sm" c="coffee.8">
