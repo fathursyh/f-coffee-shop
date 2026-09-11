@@ -6,6 +6,8 @@ import ReactDOMServer from 'react-dom/server'
 import { createInertiaApp, type ResolvedComponent } from '@inertiajs/react'
 import { TuyauProvider } from '@adonisjs/inertia/react'
 import { resolvePageComponent } from '@adonisjs/inertia/helpers'
+import { MantineProvider } from '@mantine/core'
+import { theme } from './shared/theme/theme'
 
 export default function render(page: any) {
   return createInertiaApp({
@@ -21,7 +23,9 @@ export default function render(page: any) {
     setup: ({ App, props }) => {
       return (
         <TuyauProvider client={client}>
-          <App {...props} />
+          <MantineProvider theme={theme}>
+            <App {...props} />
+          </MantineProvider>
         </TuyauProvider>
       )
     },

@@ -11,7 +11,7 @@ import { middleware } from '#start/kernel'
 import { controllers } from '#generated/controllers'
 import router from '@adonisjs/core/services/router'
 
-router.get('home', [controllers.Publics, 'home']).as('home')
+router.get('/', [controllers.Publics, 'home']).as('home')
 
 router
   .group(() => {

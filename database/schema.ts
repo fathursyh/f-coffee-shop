@@ -8,28 +8,12 @@ import { BaseModel, column } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
 
 export class CoffeeSchema extends BaseModel {
-  static $columns = [
-    'badge',
-    'basePrice250G',
-    'bestFor',
-    'createdAt',
-    'description',
-    'elevation',
-    'id',
-    'name',
-    'origin',
-    'process',
-    'roast',
-    'roastLevel',
-    'subregion',
-    'tastingNotes',
-    'updatedAt',
-  ] as const
+  static $columns = ['badge', 'basePrice250G', 'bestFor', 'createdAt', 'description', 'elevation', 'id', 'name', 'origin', 'process', 'roast', 'roastLevel', 'subregion', 'tastingNotes', 'updatedAt'] as const
   $columns = CoffeeSchema.$columns
   @column()
   declare badge: string | null
   @column()
-  declare basePrice250G: number
+  declare basePrice250G: string
   @column()
   declare bestFor: string | null
   @column.dateTime({ autoCreate: true })
@@ -49,7 +33,7 @@ export class CoffeeSchema extends BaseModel {
   @column()
   declare roast: string
   @column()
-  declare roastLevel: number
+  declare roastLevel: string
   @column()
   declare subregion: string | null
   @column()

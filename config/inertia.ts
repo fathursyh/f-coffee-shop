@@ -8,12 +8,13 @@ const inertiaConfig = defineConfig({
     /**
      * Toggle SSR mode for Inertia pages.
      */
-    enabled: false,
+    enabled: true,
 
     /**
      * Entry file used by the SSR server build.
      */
     entrypoint: 'inertia/ssr.tsx',
+    pages: (_, page) => !page.startsWith('admin'),
   },
 })
 
