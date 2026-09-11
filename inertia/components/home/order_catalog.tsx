@@ -39,7 +39,7 @@ export interface CoffeeBean extends Partial<CoffeeAttributes> {
   elevation: string | null
   process: string | null
   roast: RoastType
-  roastLevel: number
+  roastLevel: string
   tastingNotes: string[]
   description: string | null
   bestFor: string | null

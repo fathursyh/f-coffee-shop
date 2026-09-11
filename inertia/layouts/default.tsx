@@ -6,11 +6,7 @@ import { AppShell } from '@mantine/core'
 import AppHeader from '~/components/app_header'
 
 export default function Layout({ children }: { children: ReactElement<Data.SharedProps> }) {
-  const { url, flash } = usePage<{ error?: string; success?: string }>()
-
-  useEffect(() => {
-    toast.dismiss()
-  }, [url])
+  const { flash } = usePage<{ error?: string; success?: string }>()
 
   useEffect(() => {
     if (flash?.error) {

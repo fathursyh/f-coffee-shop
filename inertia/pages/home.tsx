@@ -13,6 +13,8 @@ import BrewGuide from '~/components/home/brew_guide'
 import CupGuarantee from '~/components/home/cup_guarantee'
 import CartBar from '~/components/home/cart_bar'
 import OrderDrawer from '~/components/home/order_drawer'
+import { type InertiaProps } from '~/types'
+import { useRouter } from '@adonisjs/inertia/react'
 
 export const getBeanPrice = (basePrice: number = 0, weight: '250g' | '500g' | '1kg'): number => {
   switch (weight) {
@@ -25,7 +27,8 @@ export const getBeanPrice = (basePrice: number = 0, weight: '250g' | '500g' | '1
   }
 }
 
-export default function Home() {
+export default function Home({ user }: InertiaProps) {
+  const router = useRouter()
   const [cart, setCart] = useState<CartItem[]>([])
   const [drawerOpened, setDrawerOpened] = useState<boolean>(false)
 
@@ -37,8 +40,7 @@ export default function Home() {
   )
 
   const handleAddToCart = (bean: CoffeeBean, selection: BeanSelection) => {
-    // Safely extract price from either basePrice250G or basePrice250g
-    const basePrice = Number(bean.basePrice250G ?? bean.basePrice250g ?? 0)
+    const basePrice = Number(bean.basePrice250G ?? 0)
     const unitPrice = getBeanPrice(basePrice, selection.weight)
     const cartItemId = `${bean.id}-${selection.weight}-${selection.grind}`
 
@@ -91,6 +93,14 @@ export default function Home() {
     setDrawerOpened(false)
   }
 
+  const onCheckout = () => {
+    if (!user) {
+      toast.error('You must be logged in to proceed.')
+      return router.get({ route: 'session.create' })
+    }
+    setDrawerOpened(true)
+  }
+
   return (
     <Box bg="coffee.0" pb={{ base: 160, sm: 120, md: 80 }}>
       {/* 1. Hero Section */}
@@ -110,11 +120,7 @@ export default function Home() {
 
       {/* 6. Sticky Cart Bar */}
       {totalCartCount > 0 && (
-        <CartBar
-          totalCount={totalCartCount}
-          subtotal={cartSubtotal}
-          onCheckout={() => setDrawerOpened(true)}
-        />
+        <CartBar totalCount={totalCartCount} subtotal={cartSubtotal} onCheckout={onCheckout} />
       )}
 
       {/* 7. Order Drawer */}

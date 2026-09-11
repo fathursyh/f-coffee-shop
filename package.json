@@ -92,7 +92,6 @@
     "@tuyau/core": "^1.2.2",
     "@vinejs/vine": "^4.4.0",
     "axios": "^1.19.0",
-    "better-sqlite3": "^13.0.3",
     "dayjs": "^1.11.23",
     "edge.js": "^6.5.1",
     "embla-carousel": "^8.6.0",
