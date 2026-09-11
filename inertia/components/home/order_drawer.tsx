@@ -22,12 +22,12 @@ import {
 } from '@tabler/icons-react'
 import { useMediaQuery } from '@mantine/hooks'
 import { toast } from 'sonner'
-import type { CartItem } from './order_catalog'
+import type Cart from '#models/cart'
 
 interface OrderDrawerProps {
   opened: boolean
   onClose: () => void
-  cart: CartItem[]
+  cart: Cart[]
   cartSubtotal: number
   onUpdateQuantity: (cartItemId: string, delta: number) => void
   onRemoveItem: (cartItemId: string) => void
@@ -146,10 +146,10 @@ export default function OrderDrawer({
                   <Group justify="space-between" align="flex-start" wrap="nowrap">
                     <Box style={{ flex: 1 }}>
                       <Text size="sm" fw={700} c="coffee.9">
-                        {item.name}
+                        {item.coffee.name}
                       </Text>
                       <Text size="xs" c="coffee.7">
-                        {item.origin} • {item.roast} • {item.weight}
+                        {item.coffee.origin} • {item.coffee.roast} • {item.weight}
                       </Text>
                       <Text size="xs" c="coffee.6" mt={2}>
                         {item.grind}
@@ -158,7 +158,7 @@ export default function OrderDrawer({
 
                     <CloseButton
                       size="sm"
-                      onClick={() => onRemoveItem(item.id)}
+                      onClick={() => onRemoveItem(item.id.toString())}
                       aria-label="Remove item"
                     />
                   </Group>
@@ -188,7 +188,7 @@ export default function OrderDrawer({
                         size="sm"
                         variant="subtle"
                         color="coffee"
-                        onClick={() => onUpdateQuantity(item.id, -1)}
+                        onClick={() => onUpdateQuantity(item.id.toString(), -1)}
                         aria-label="Decrease quantity"
                       >
                         <IconMinus size={14} />
@@ -206,7 +206,7 @@ export default function OrderDrawer({
                         size="sm"
                         variant="subtle"
                         color="coffee"
-                        onClick={() => onUpdateQuantity(item.id, 1)}
+                        onClick={() => onUpdateQuantity(item.id.toString(), 1)}
                         aria-label="Increase quantity"
                       >
                         <IconPlus size={14} />

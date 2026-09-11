@@ -7,8 +7,60 @@
 import { BaseModel, column } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
 
+export class CartSchema extends BaseModel {
+  static $columns = [
+    'coffeeId',
+    'createdAt',
+    'grind',
+    'id',
+    'price',
+    'quantity',
+    'roastType',
+    'updatedAt',
+    'userId',
+    'weight',
+  ] as const
+  $columns = CartSchema.$columns
+  @column()
+  declare coffeeId: string
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column()
+  declare grind: string
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare price: number
+  @column()
+  declare quantity: number
+  @column()
+  declare roastType: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+  @column()
+  declare userId: number
+  @column()
+  declare weight: string
+}
+
 export class CoffeeSchema extends BaseModel {
-  static $columns = ['badge', 'basePrice250G', 'bestFor', 'createdAt', 'description', 'elevation', 'id', 'name', 'origin', 'process', 'roast', 'roastLevel', 'subregion', 'tastingNotes', 'updatedAt'] as const
+  static $columns = [
+    'badge',
+    'basePrice250G',
+    'bestFor',
+    'createdAt',
+    'description',
+    'elevation',
+    'id',
+    'name',
+    'origin',
+    'process',
+    'roast',
+    'roastLevel',
+    'subregion',
+    'tastingNotes',
+    'updatedAt',
+  ] as const
   $columns = CoffeeSchema.$columns
   @column()
   declare badge: string | null
@@ -43,7 +95,15 @@ export class CoffeeSchema extends BaseModel {
 }
 
 export class UserSchema extends BaseModel {
-  static $columns = ['createdAt', 'email', 'fullName', 'id', 'password', 'updatedAt'] as const
+  static $columns = [
+    'createdAt',
+    'email',
+    'fullName',
+    'id',
+    'password',
+    'role',
+    'updatedAt',
+  ] as const
   $columns = UserSchema.$columns
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
@@ -55,6 +115,8 @@ export class UserSchema extends BaseModel {
   declare id: number
   @column({ serializeAs: null })
   declare password: string
+  @column()
+  declare role: string | null
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
 }

@@ -6,7 +6,11 @@ import { AppShell } from '@mantine/core'
 import AppHeader from '~/components/app_header'
 
 export default function Layout({ children }: { children: ReactElement<Data.SharedProps> }) {
-  const { flash } = usePage<{ error?: string; success?: string }>()
+  const { url, flash } = usePage<{ error?: string; success?: string }>()
+
+  useEffect(() => {
+    toast.dismiss()
+  }, [url])
 
   useEffect(() => {
     if (flash?.error) {
@@ -20,20 +24,11 @@ export default function Layout({ children }: { children: ReactElement<Data.Share
   const user = children.props.user
 
   return (
-    <AppShell header={{ height: { base: 60, sm: 64 } }}>
+    <AppShell header={{ height: 64 }}>
       <AppHeader user={user} />
-      <AppShell.Main
-        bg="coffee.0"
-        style={{
-          minHeight: '100dvh',
-          display: 'flex',
-          flexDirection: 'column',
-        }}
-      >
-        {children}
-      </AppShell.Main>
+      <AppShell.Main bg="coffee.0">{children}</AppShell.Main>
 
-      <Toaster position="top-center" richColors />
+      <Toaster position="bottom-right" richColors />
     </AppShell>
   )
 }

@@ -1,4 +1,3 @@
-// database/migrations/1710000000000_create_coffees_table.ts
 import { BaseSchema } from '@adonisjs/lucid/schema'
 
 export default class extends BaseSchema {

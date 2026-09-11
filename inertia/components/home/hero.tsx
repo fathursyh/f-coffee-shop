@@ -22,16 +22,16 @@ import {
 export default function HomeHero() {
   return (
     <Box
-      py={{ base: 60, sm: 76, md: 92 }}
-      px={{ base: 'md', sm: 'lg' }}
+      py={{ base: 36, sm: 52, md: 72 }}
+      px={{ base: 'xs', sm: 'md' }}
       style={{
         borderBottom: '1px solid var(--mantine-color-coffee-2)',
         background:
           'linear-gradient(180deg, rgba(253, 250, 247, 1) 0%, rgba(245, 237, 228, 0.45) 100%)',
       }}
     >
-      <Container size="lg" px={{ base: 'md', sm: 'lg' }}>
-        <Stack align="center" gap="md" ta="center" maw={820} mx="auto">
+      <Container size="lg" px={{ base: 'xs', sm: 'md' }}>
+        <Stack align="center" py={{ base: 'sm' }} ta="center" maw={820} mx="auto">
           <Badge
             variant="outline"
             color="coffee"

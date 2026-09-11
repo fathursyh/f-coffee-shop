@@ -26,5 +26,11 @@ router
 router
   .group(() => {
     router.post('logout', [controllers.Session, 'destroy'])
+
+    router.group(() => {
+      router.post('carts/sync', [controllers.Carts, 'sync']).as('carts.sync')
+      router.resource('carts', controllers.Carts).except(['create', 'edit', 'index'])
+      router.delete('carts', [controllers.Carts, 'clear']).as('carts.clear')
+    })
   })
   .use(middleware.auth())

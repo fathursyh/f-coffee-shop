@@ -1,20 +1,25 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title data-inertia>
-      AdonisJS
-    </title>
 
-    @viteReactRefresh()
-    @vite(['inertia/app.tsx'])
-    @inertiaHead()
-    @stack('dumper')
-  </head>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
-  <body>
-    @inertia()
-  </body>
+  <title data-inertia>
+    Coffee
+  </title>
+
+  @viteReactRefresh()
+  @vite(['inertia/app.tsx'])
+  @inertiaHead()
+  @stack('dumper')
+</head>
+
+<body>
+  @inertia()
+</body>
 
 </html>

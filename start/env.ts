@@ -4,7 +4,7 @@
 |--------------------------------------------------------------------------
 |
 | The `Env.create` method creates an instance of the Env service. The
-| service validates the environment variables and also cast values
+| service validates the environment variables and also casts values
 | to JavaScript data types.
 |
 */
@@ -24,4 +24,16 @@ export default await Env.create(new URL('../', import.meta.url), {
 
   // Session
   SESSION_DRIVER: Env.schema.enum(['cookie', 'memory', 'database'] as const),
+
+  // DB
+  DB_CONNECTION: Env.schema.enum(['mysql', 'pg', 'sqlite', 'mssql'] as const),
+  DB_HOST: Env.schema.string(),
+  DB_PORT: Env.schema.number(),
+  DB_DATABASE: Env.schema.string(),
+  DB_USER: Env.schema.string(),
+  DB_PASSWORD: Env.schema.string.optional(),
+
+  // Root account
+  ROOT_EMAIL: Env.schema.string(),
+  ROOT_PASSWORD: Env.schema.string(),
 })

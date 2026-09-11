@@ -24,6 +24,6 @@ export default class SessionController {
   async destroy({ auth, response, session }: HttpContext) {
     await auth.use('web').logout()
     session.flash('success', 'You have successfully logged out!')
-    response.redirect().toRoute('session.create')
+    response.redirect().toRoute('home')
   }
 }

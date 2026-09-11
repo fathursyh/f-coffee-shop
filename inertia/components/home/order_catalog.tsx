@@ -1,5 +1,4 @@
-import type { CoffeeAttributes } from '#models/coffee'
-import { usePage } from '@inertiajs/react'
+import type Coffee from '#models/coffee'
 import {
   ActionIcon,
   Badge,
@@ -29,37 +28,6 @@ export const GRIND_OPTIONS = [
   { value: 'french-press', label: 'French Press & Cold Brew (Coarse)' },
 ]
 
-export type RoastType = 'Light' | 'Medium-Light' | 'Medium' | 'Medium-Dark' | 'Dark' | string
-
-export interface CoffeeBean extends Partial<CoffeeAttributes> {
-  id: string
-  name: string
-  origin: string
-  subregion: string | null
-  elevation: string | null
-  process: string | null
-  roast: RoastType
-  roastLevel: string
-  tastingNotes: string[]
-  description: string | null
-  bestFor: string | null
-  basePrice250G: number
-  basePrice250g?: number
-  badge?: string | null
-}
-
-export interface CartItem {
-  id: string
-  coffeeId: string
-  name: string
-  origin: string
-  roast: RoastType
-  weight: '250g' | '500g' | '1kg'
-  grind: string
-  price: number
-  quantity: number
-}
-
 export interface BeanSelection {
   weight: '250g' | '500g' | '1kg'
   grind: string
@@ -67,15 +35,11 @@ export interface BeanSelection {
 }
 
 interface OrderCatalogProps {
-  onAddToCart: (bean: CoffeeBean, selection: BeanSelection) => void
+  coffee: Coffee[]
+  onAddToCart: (bean: Coffee, selection: BeanSelection) => void
 }
 
-type CatalogInertiaProps = {
-  coffee: CoffeeBean[]
-}
-
-export default function OrderCatalog({ onAddToCart }: OrderCatalogProps) {
-  const { coffee = [] } = usePage<CatalogInertiaProps>().props
+export default function OrderCatalog({ coffee, onAddToCart }: OrderCatalogProps) {
   const [selectedRoastFilter, setSelectedRoastFilter] = useState<string>('all')
 
   const [beanSelections, setBeanSelections] = useState<
@@ -135,7 +99,7 @@ export default function OrderCatalog({ onAddToCart }: OrderCatalogProps) {
     })
   }
 
-  const handleAddToCartClick = (bean: CoffeeBean) => {
+  const handleAddToCartClick = (bean: Coffee) => {
     const selection = beanSelections[bean.id] || {
       weight: '250g',
       grind: 'whole-bean',
@@ -237,7 +201,7 @@ export default function OrderCatalog({ onAddToCart }: OrderCatalogProps) {
               grind: 'whole-bean',
               quantity: 1,
             }
-            const basePrice = Number(bean.basePrice250G ?? bean.basePrice250g ?? 0)
+            const basePrice = Number(bean.basePrice250G ?? 0)
             const currentPrice = getBeanPrice(basePrice, selection.weight)
             const tastingNotesList = Array.isArray(bean.tastingNotes) ? bean.tastingNotes : []
 
