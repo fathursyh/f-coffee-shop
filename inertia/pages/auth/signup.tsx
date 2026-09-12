@@ -15,10 +15,11 @@ import {
   Title,
 } from '@mantine/core'
 import { IconCoffee, IconLock, IconLockCheck, IconMail, IconUser } from '@tabler/icons-react'
+import classes from './auth.module.css'
 
 export default function Signup() {
   return (
-    <Box bg="coffee.0" py="xl" style={{ display: 'flex', alignItems: 'center' }}>
+    <Box bg="coffee.0" py="xl" className={classes.pageWrapper}>
       <Container size={440} w="100%">
         {/* Café Header */}
         <Stack align="center" gap="xs" mb="xl">
@@ -31,7 +32,7 @@ export default function Signup() {
           </Title>
 
           <Text size="sm" c="dimmed" ta="center">
-            Create an account to start earning coffee beans & rewards.
+            Create an account to start earning coffee beans &amp; rewards.
           </Text>
         </Stack>
 

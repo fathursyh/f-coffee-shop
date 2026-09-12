@@ -1,0 +1,8 @@
+.eyebrow {
+  letter-spacing: 0.08em;
+}
+
+.card {
+  border: 1px solid var(--mantine-color-coffee-2);
+  box-shadow: none;
+}

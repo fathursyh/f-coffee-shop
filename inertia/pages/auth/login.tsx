@@ -17,10 +17,11 @@ import {
   Title,
 } from '@mantine/core'
 import { IconCoffee, IconLock, IconMail } from '@tabler/icons-react'
+import classes from './auth.module.css'
 
 export default function Login() {
   return (
-    <Box bg="coffee.0" py="xl" style={{ display: 'flex', alignItems: 'center' }}>
+    <Box bg="coffee.0" py="xl" className={classes.pageWrapper}>
       <Container size={440} w="100%">
         <Stack align="center" gap="xs" mb="xl">
           <ThemeIcon size={56} radius="xl" variant="light" color="coffee">
@@ -82,7 +83,7 @@ export default function Login() {
 
           <Center>
             <Text size="sm" c="dimmed">
-              Don’t have an account?{' '}
+              Don&apos;t have an account?{' '}
               <Anchor href="/register" fw={600} c="coffee.7" underline="hover">
                 Create one
               </Anchor>

@@ -1,28 +1,15 @@
 import { Container, Paper, SimpleGrid, Stack, Text, ThemeIcon, Title } from '@mantine/core'
 import { IconFlame, IconLeaf, IconScale } from '@tabler/icons-react'
+import classes from './roastery_standard.module.css'
 
 export default function RoasteryStandard() {
   return (
     <Container size="xl" py={{ base: 64, sm: 80, md: 96 }} px={{ base: 'md', sm: 'lg' }}>
-      <Paper
-        p={{ base: 'xl', sm: 36, md: 48 }}
-        radius="lg"
-        bg="white"
-        style={{
-          border: '1px solid var(--mantine-color-coffee-2)',
-          boxShadow: 'none',
-        }}
-      >
+      <Paper p={{ base: 'xl', sm: 36, md: 48 }} radius="lg" bg="white" className={classes.paper}>
         <Stack gap="xl">
-          <div style={{ textAlign: 'center', maxWidth: 640, margin: '0 auto' }}>
-            <Text
-              size="xs"
-              fw={700}
-              c="coffee.6"
-              tt="uppercase"
-              style={{ letterSpacing: '0.08em' }}
-            >
-              Craft & Transparency
+          <div className={classes.sectionHeader}>
+            <Text size="xs" fw={700} c="coffee.6" tt="uppercase" className={classes.eyebrow}>
+              Craft &amp; Transparency
             </Text>
             <Title
               order={2}
@@ -43,7 +30,7 @@ export default function RoasteryStandard() {
               <ThemeIcon size={42} radius="md" color="coffee" variant="light">
                 <IconLeaf size={22} />
               </ThemeIcon>
-              <Title order={4} c="coffee.9" style={{ fontSize: '1.1rem' }}>
+              <Title order={3} c="coffee.9" className={classes.featureTitle}>
                 Direct-Trade Sourcing
               </Title>
               <Text size="xs" c="coffee.8" style={{ lineHeight: 1.6 }}>
@@ -57,7 +44,7 @@ export default function RoasteryStandard() {
               <ThemeIcon size={42} radius="md" color="coffee" variant="light">
                 <IconFlame size={22} />
               </ThemeIcon>
-              <Title order={4} c="coffee.9" style={{ fontSize: '1.1rem' }}>
+              <Title order={3} c="coffee.9" className={classes.featureTitle}>
                 Drum-Roasted in Small Batches
               </Title>
               <Text size="xs" c="coffee.8" style={{ lineHeight: 1.6 }}>
@@ -70,7 +57,7 @@ export default function RoasteryStandard() {
               <ThemeIcon size={42} radius="md" color="coffee" variant="light">
                 <IconScale size={22} />
               </ThemeIcon>
-              <Title order={4} c="coffee.9" style={{ fontSize: '1.1rem' }}>
+              <Title order={3} c="coffee.9" className={classes.featureTitle}>
                 Aroma-Lock Resealable Pouches
               </Title>
               <Text size="xs" c="coffee.8" style={{ lineHeight: 1.6 }}>

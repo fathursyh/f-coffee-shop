@@ -1,0 +1,46 @@
+.drawerHeader {
+  border-bottom: 1px solid var(--mantine-color-coffee-2);
+  background-color: var(--mantine-color-coffee-0);
+}
+
+.drawerBody {
+  background-color: var(--mantine-color-coffee-0);
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 60px);
+}
+
+.scrollArea {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.shippingBanner {
+  border: 1px solid var(--mantine-color-coffee-2);
+  box-shadow: none;
+}
+
+.itemPaper {
+  border: 1px solid var(--mantine-color-coffee-2);
+  box-shadow: none;
+}
+
+.quantityControl {
+  border: 1px solid var(--mantine-color-coffee-2);
+  border-radius: var(--mantine-radius-md);
+  padding: 2px 4px;
+  background-color: var(--mantine-color-coffee-0);
+}
+
+.quantityDisplay {
+  min-width: 20px;
+  text-align: center;
+}
+
+.footerBox {
+  border-top: 1px solid var(--mantine-color-coffee-2);
+}
+
+.roastNote {
+  border: 1px solid var(--mantine-color-coffee-2);
+}

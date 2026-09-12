@@ -1,5 +1,6 @@
 import { Box, Button, Group, Paper, Text, ThemeIcon } from '@mantine/core'
 import { IconShoppingBag } from '@tabler/icons-react'
+import classes from './cart_bar.module.css'
 
 interface CartBarProps {
   totalCount: number
@@ -9,31 +10,13 @@ interface CartBarProps {
 
 export default function CartBar({ totalCount, subtotal, onCheckout }: CartBarProps) {
   return (
-    <Box
-      style={{
-        position: 'fixed',
-        bottom: 'max(16px, env(safe-area-inset-bottom, 16px))',
-        left: 0,
-        right: 0,
-        zIndex: 99,
-        display: 'flex',
-        justifyContent: 'center',
-        padding: '0 12px',
-        pointerEvents: 'none',
-      }}
-    >
+    <Box className={classes.wrapper}>
       <Paper
         p={{ base: 'xs', sm: 'md' }}
         radius="xl"
         bg="coffee.9"
         c="white"
-        style={{
-          pointerEvents: 'auto',
-          boxShadow: '0 12px 32px rgba(50, 30, 16, 0.35)',
-          border: '1px solid var(--mantine-color-coffee-6)',
-          maxWidth: 540,
-          width: '100%',
-        }}
+        className={classes.pill}
       >
         <Group justify="space-between" align="center" wrap="nowrap" gap="xs">
           <Group gap="sm" wrap="nowrap">
@@ -42,7 +25,7 @@ export default function CartBar({ totalCount, subtotal, onCheckout }: CartBarPro
               radius="xl"
               color="coffee.7"
               variant="filled"
-              style={{ flexShrink: 0 }}
+              className={classes.icon}
             >
               <IconShoppingBag size={18} color="white" />
             </ThemeIcon>
@@ -63,13 +46,9 @@ export default function CartBar({ totalCount, subtotal, onCheckout }: CartBarPro
             radius="xl"
             px={{ base: 14, sm: 20 }}
             onClick={onCheckout}
-            style={{
-              backgroundColor: 'var(--mantine-color-coffee-1)',
-              fontWeight: 700,
-              flexShrink: 0,
-            }}
+            classNames={{ root: classes.checkoutBtn }}
           >
-            Review & Checkout
+            Review &amp; Checkout
           </Button>
         </Group>
       </Paper>

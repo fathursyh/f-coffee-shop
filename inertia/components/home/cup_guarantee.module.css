@@ -1,0 +1,9 @@
+.paper {
+  border: 1px dashed var(--mantine-color-coffee-3);
+  box-shadow: none;
+  text-align: center;
+}
+
+.title {
+  font-size: 1.25rem;
+}

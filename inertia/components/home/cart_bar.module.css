@@ -1,0 +1,29 @@
+.wrapper {
+  position: fixed;
+  bottom: max(16px, env(safe-area-inset-bottom, 16px));
+  left: 0;
+  right: 0;
+  z-index: 99;
+  display: flex;
+  justify-content: center;
+  padding: 0 12px;
+  pointer-events: none;
+}
+
+.pill {
+  pointer-events: auto;
+  box-shadow: 0 12px 32px rgba(50, 30, 16, 0.35);
+  border: 1px solid var(--mantine-color-coffee-6);
+  max-width: 540px;
+  width: 100%;
+}
+
+.icon {
+  flex-shrink: 0;
+}
+
+.checkoutBtn {
+  background-color: var(--mantine-color-coffee-1);
+  font-weight: 700;
+  flex-shrink: 0;
+}

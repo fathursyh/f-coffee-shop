@@ -2,6 +2,7 @@ import { Form, Link } from '@adonisjs/inertia/react'
 import { IconCoffee, IconLogin2, IconLogout } from '@tabler/icons-react'
 import { AppShell, Avatar, Box, Button, Container, Group, Menu, Title } from '@mantine/core'
 import { type InertiaProps } from '~/types'
+import classes from './app_header.module.css'
 
 type AppHeaderProps = {
   user: InertiaProps['user']
@@ -9,28 +10,13 @@ type AppHeaderProps = {
 
 export default function AppHeader({ user }: AppHeaderProps) {
   return (
-    <AppShell.Header
-      bg="white"
-      style={{
-        borderBottom: '1px solid var(--mantine-color-coffee-2)',
-      }}
-    >
+    <AppShell.Header bg="white" className={classes.header}>
       <Container size="xl" h="100%">
         <Group justify="space-between" h="100%" w="100%">
           {/* Brand / Logo */}
-          <Box
-            component={Link}
-            route="home"
-            c="coffee.8"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              textDecoration: 'none',
-              gap: '0.5em',
-            }}
-          >
+          <Box component={Link} route="home" c="coffee.8" className={classes.brand}>
             <IconCoffee />
-            <Title size="lg" fw="bold">
+            <Title size="lg" fw="bold" component="span">
               F-Coffee Shop
             </Title>
           </Box>

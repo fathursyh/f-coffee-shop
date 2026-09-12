@@ -18,17 +18,14 @@ import {
   IconPackage,
   IconTruckDelivery,
 } from '@tabler/icons-react'
+import classes from './hero.module.css'
 
 export default function HomeHero() {
   return (
     <Box
       py={{ base: 36, sm: 52, md: 72 }}
       px={{ base: 'xs', sm: 'md' }}
-      style={{
-        borderBottom: '1px solid var(--mantine-color-coffee-2)',
-        background:
-          'linear-gradient(180deg, rgba(253, 250, 247, 1) 0%, rgba(245, 237, 228, 0.45) 100%)',
-      }}
+      className={classes.heroBox}
     >
       <Container size="lg" px={{ base: 'xs', sm: 'md' }}>
         <Stack align="center" py={{ base: 'sm' }} ta="center" maw={820} mx="auto">
@@ -38,27 +35,12 @@ export default function HomeHero() {
             size="lg"
             radius="sm"
             leftSection={<IconFlame size={14} />}
-            style={{
-              letterSpacing: '0.06em',
-              textTransform: 'uppercase',
-              fontWeight: 600,
-              borderColor: 'var(--mantine-color-coffee-3)',
-              background: 'rgba(255, 255, 255, 0.8)',
-            }}
+            classNames={{ root: classes.badge }}
           >
             Small-Batch Micro Roastery
           </Badge>
 
-          <Title
-            order={1}
-            c="coffee.9"
-            style={{
-              fontSize: 'clamp(1.75rem, 6vw, 3.4rem)',
-              lineHeight: 1.18,
-              fontWeight: 700,
-              wordBreak: 'break-word',
-            }}
-          >
+          <Title order={1} c="coffee.9" className={classes.heroTitle}>
             Honest coffee beans, roasted slow and shipped fresh.
           </Title>
 
@@ -66,8 +48,8 @@ export default function HomeHero() {
             size="md"
             c="coffee.8"
             maw={640}
-            style={{ lineHeight: 1.6 }}
             fz={{ base: 'sm', sm: 'md', md: 'lg' }}
+            className={classes.bodyText}
           >
             Direct-trade single origins and seasonal roastery blends. We fire up our drum roaster
             every Tuesday and Thursday so your beans land on your doorstep right inside their peak
@@ -81,10 +63,7 @@ export default function HomeHero() {
               py={6}
               radius="xl"
               bg="white"
-              style={{
-                border: '1px solid var(--mantine-color-coffee-2)',
-                boxShadow: 'none',
-              }}
+              className={classes.highlightPill}
             >
               <Group gap={6}>
                 <ThemeIcon size={20} radius="xl" color="coffee" variant="light">
@@ -101,17 +80,14 @@ export default function HomeHero() {
               py={6}
               radius="xl"
               bg="white"
-              style={{
-                border: '1px solid var(--mantine-color-coffee-2)',
-                boxShadow: 'none',
-              }}
+              className={classes.highlightPill}
             >
               <Group gap={6}>
                 <ThemeIcon size={20} radius="xl" color="coffee" variant="light">
                   <IconTruckDelivery size={12} />
                 </ThemeIcon>
                 <Text size="xs" fw={600} c="coffee.9">
-                  Roasted & Dispatched &lt; 48 Hours
+                  Roasted &amp; Dispatched &lt; 48 Hours
                 </Text>
               </Group>
             </Paper>
@@ -121,10 +97,7 @@ export default function HomeHero() {
               py={6}
               radius="xl"
               bg="white"
-              style={{
-                border: '1px solid var(--mantine-color-coffee-2)',
-                boxShadow: 'none',
-              }}
+              className={classes.highlightPill}
             >
               <Group gap={6}>
                 <ThemeIcon size={20} radius="xl" color="coffee" variant="light">
@@ -165,13 +138,9 @@ export default function HomeHero() {
               onClick={() => {
                 document.getElementById('brew-guide')?.scrollIntoView({ behavior: 'smooth' })
               }}
-              style={{
-                borderColor: 'var(--mantine-color-coffee-3)',
-                color: 'var(--mantine-color-coffee-8)',
-                background: 'white',
-              }}
+              classNames={{ root: classes.outlineBtn }}
             >
-              Brew & Grind Guide
+              Brew &amp; Grind Guide
             </Button>
           </Flex>
         </Stack>

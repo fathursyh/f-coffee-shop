@@ -1,0 +1,87 @@
+.filterWrapper {
+  overflow-x: auto;
+  max-width: 100%;
+  -webkit-overflow-scrolling: touch;
+}
+
+.filterRoot {
+  background-color: white;
+  border: 1px solid var(--mantine-color-coffee-2);
+  padding: 3px;
+  min-width: max-content;
+}
+
+.filterIndicator {
+  background-color: var(--mantine-color-coffee-7);
+}
+
+.card {
+  border: 1px solid var(--mantine-color-coffee-2);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.roastBadge {
+  font-weight: 600;
+}
+
+.specialBadge {
+  background-color: var(--mantine-color-coffee-8);
+  letter-spacing: 0.04em;
+}
+
+.terroirBox {
+  border: 1px solid var(--mantine-color-coffee-1);
+  box-shadow: none;
+}
+
+.terroirCellBordered {
+  border-left: 1px solid var(--mantine-color-coffee-2);
+  padding-left: 6px;
+}
+
+.tastingNote {
+  border-color: var(--mantine-color-coffee-2);
+  color: var(--mantine-color-coffee-8);
+  background-color: var(--mantine-color-coffee-0);
+  text-transform: none;
+  font-weight: 500;
+}
+
+.quantityControl {
+  border: 1px solid var(--mantine-color-coffee-2);
+  border-radius: var(--mantine-radius-md);
+  padding: 2px 4px;
+  background-color: var(--mantine-color-coffee-0);
+}
+
+.quantityDisplay {
+  min-width: 18px;
+  text-align: center;
+}
+
+.weightControl {
+  background-color: var(--mantine-color-coffee-0);
+  border: 1px solid var(--mantine-color-coffee-2);
+}
+
+.selectLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--mantine-color-coffee-9);
+  margin-bottom: 3px;
+}
+
+.selectInput {
+  background-color: var(--mantine-color-coffee-0);
+  border-color: var(--mantine-color-coffee-2);
+  font-size: 12px;
+}
+
+.addBtn {
+  height: 32px;
+  font-weight: 700;
+  background-color: var(--mantine-color-coffee-7);
+}

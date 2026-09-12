@@ -23,6 +23,7 @@ import {
 import { useMediaQuery } from '@mantine/hooks'
 import { toast } from 'sonner'
 import type Cart from '#models/cart'
+import classes from './order_drawer.module.css'
 
 interface OrderDrawerProps {
   opened: boolean
@@ -66,33 +67,16 @@ export default function OrderDrawer({
           </Text>
         </Group>
       }
-      styles={{
-        header: {
-          borderBottom: '1px solid var(--mantine-color-coffee-2)',
-          backgroundColor: 'var(--mantine-color-coffee-0)',
-        },
-        body: {
-          backgroundColor: 'var(--mantine-color-coffee-0)',
-          display: 'flex',
-          flexDirection: 'column',
-          height: 'calc(100% - 60px)',
-        },
+      classNames={{
+        header: classes.drawerHeader,
+        body: classes.drawerBody,
       }}
     >
       <Stack justify="space-between" style={{ height: '100%' }}>
         {/* Items or Empty */}
-        <Box style={{ flex: 1, overflowY: 'auto' }}>
+        <Box className={classes.scrollArea}>
           {/* Free shipping counter banner */}
-          <Paper
-            p="sm"
-            radius="md"
-            bg="white"
-            mb="md"
-            style={{
-              border: '1px solid var(--mantine-color-coffee-2)',
-              boxShadow: 'none',
-            }}
-          >
+          <Paper p="sm" radius="md" bg="white" mb="md" className={classes.shippingBanner}>
             <Group justify="space-between" mb={6}>
               <Text size="xs" fw={600} c="coffee.9">
                 {remainingForFreeShipping > 0
@@ -133,16 +117,7 @@ export default function OrderDrawer({
           ) : (
             <Stack gap="sm">
               {cart.map((item) => (
-                <Paper
-                  key={item.id}
-                  p="sm"
-                  radius="md"
-                  bg="white"
-                  style={{
-                    border: '1px solid var(--mantine-color-coffee-2)',
-                    boxShadow: 'none',
-                  }}
-                >
+                <Paper key={item.id} p="sm" radius="md" bg="white" className={classes.itemPaper}>
                   <Group justify="space-between" align="flex-start" wrap="nowrap">
                     <Box style={{ flex: 1 }}>
                       <Text size="sm" fw={700} c="coffee.9">
@@ -175,15 +150,7 @@ export default function OrderDrawer({
                       </Text>
                     </Box>
 
-                    <Group
-                      gap={2}
-                      style={{
-                        border: '1px solid var(--mantine-color-coffee-2)',
-                        borderRadius: 'var(--mantine-radius-md)',
-                        padding: '2px 4px',
-                        backgroundColor: 'var(--mantine-color-coffee-0)',
-                      }}
-                    >
+                    <Group gap={2} className={classes.quantityControl}>
                       <ActionIcon
                         size="sm"
                         variant="subtle"
@@ -198,7 +165,7 @@ export default function OrderDrawer({
                         fw={700}
                         c="coffee.9"
                         px={6}
-                        style={{ minWidth: 20, textAlign: 'center' }}
+                        className={classes.quantityDisplay}
                       >
                         {item.quantity}
                       </Text>
@@ -224,7 +191,7 @@ export default function OrderDrawer({
           <Box
             pt="md"
             pb="calc(env(safe-area-inset-bottom, 0px) + 8px)"
-            style={{ borderTop: '1px solid var(--mantine-color-coffee-2)' }}
+            className={classes.footerBox}
           >
             <Stack gap="xs">
               <Group justify="space-between">
@@ -256,16 +223,11 @@ export default function OrderDrawer({
                 </Text>
               </Group>
 
-              <Paper
-                p="xs"
-                radius="sm"
-                bg="coffee.1"
-                style={{ border: '1px solid var(--mantine-color-coffee-2)' }}
-              >
+              <Paper p="xs" radius="sm" bg="coffee.1" className={classes.roastNote}>
                 <Group gap={6} wrap="nowrap">
                   <IconCalendarCheck size={16} color="var(--mantine-color-coffee-7)" />
                   <Text size="xs" c="coffee.7">
-                    Roasted & shipped within 48 hours. Fresh to your door in peak flavor!
+                    Roasted &amp; shipped within 48 hours. Fresh to your door in peak flavor!
                   </Text>
                 </Group>
               </Paper>

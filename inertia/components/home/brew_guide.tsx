@@ -1,4 +1,5 @@
 import { Box, Container, Paper, SimpleGrid, Stack, Text, Title } from '@mantine/core'
+import classes from './brew_guide.module.css'
 
 export default function BrewGuide() {
   const brewGuides = [
@@ -37,11 +38,11 @@ export default function BrewGuide() {
     >
       <Stack gap="xl">
         <Box>
-          <Text size="xs" fw={700} c="coffee.6" tt="uppercase" style={{ letterSpacing: '0.08em' }}>
+          <Text size="xs" fw={700} c="coffee.6" tt="uppercase" className={classes.eyebrow}>
             Home Barista Companion
           </Text>
           <Title order={2} c="coffee.9" fz={{ base: '1.4rem', sm: '1.7rem', md: '1.8rem' }}>
-            Grind Size & Brewing Ratio Guide
+            Grind Size &amp; Brewing Ratio Guide
           </Title>
           <Text size="sm" c="coffee.7" fz={{ base: 'xs', sm: 'sm' }} mt={4}>
             Not sure which grind to select for your kitchen setup? Here is our roaster&apos;s cheat
@@ -56,10 +57,7 @@ export default function BrewGuide() {
               p={{ base: 'lg', sm: 'md' }}
               radius="md"
               bg="white"
-              style={{
-                border: '1px solid var(--mantine-color-coffee-2)',
-                boxShadow: 'none',
-              }}
+              className={classes.card}
             >
               <Text size="xs" fw={700} c="coffee.9">
                 {guide.title}
