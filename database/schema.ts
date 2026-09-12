@@ -94,6 +94,39 @@ export class CoffeeSchema extends BaseModel {
   declare updatedAt: DateTime | null
 }
 
+export class UserInfoSchema extends BaseModel {
+  static $columns = [
+    'address',
+    'city',
+    'country',
+    'createdAt',
+    'id',
+    'phone',
+    'postCode',
+    'updatedAt',
+    'userId',
+  ] as const
+  $columns = UserInfoSchema.$columns
+  @column()
+  declare address: string
+  @column()
+  declare city: string
+  @column()
+  declare country: string
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare phone: string
+  @column()
+  declare postCode: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+  @column()
+  declare userId: number
+}
+
 export class UserSchema extends BaseModel {
   static $columns = [
     'createdAt',
