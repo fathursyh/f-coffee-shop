@@ -94,6 +94,126 @@ export class CoffeeSchema extends BaseModel {
   declare updatedAt: DateTime | null
 }
 
+export class OrderItemSchema extends BaseModel {
+  static $columns = [
+    'coffeeId',
+    'coffeeName',
+    'createdAt',
+    'grind',
+    'id',
+    'orderId',
+    'quantity',
+    'roastType',
+    'subtotal',
+    'unitPrice',
+    'updatedAt',
+    'weight',
+  ] as const
+  $columns = OrderItemSchema.$columns
+  @column()
+  declare coffeeId: string | null
+  @column()
+  declare coffeeName: string
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column()
+  declare grind: string
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare orderId: number
+  @column()
+  declare quantity: number
+  @column()
+  declare roastType: string
+  @column()
+  declare subtotal: string
+  @column()
+  declare unitPrice: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+  @column()
+  declare weight: string
+}
+
+export class OrderSchema extends BaseModel {
+  static $columns = [
+    'createdAt',
+    'id',
+    'shippingAddress',
+    'shippingCity',
+    'shippingCost',
+    'shippingCountry',
+    'shippingPhone',
+    'shippingPostCode',
+    'status',
+    'subtotal',
+    'totalAmount',
+    'updatedAt',
+    'userId',
+  ] as const
+  $columns = OrderSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare shippingAddress: string
+  @column()
+  declare shippingCity: string
+  @column()
+  declare shippingCost: string
+  @column()
+  declare shippingCountry: string
+  @column()
+  declare shippingPhone: string
+  @column()
+  declare shippingPostCode: string
+  @column()
+  declare status: string
+  @column()
+  declare subtotal: string
+  @column()
+  declare totalAmount: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+  @column()
+  declare userId: number
+}
+
+export class PaymentSchema extends BaseModel {
+  static $columns = [
+    'createdAt',
+    'id',
+    'orderId',
+    'paidAt',
+    'paymentLink',
+    'status',
+    'totalPrice',
+    'updatedAt',
+    'userId',
+  ] as const
+  $columns = PaymentSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare orderId: number
+  @column.dateTime()
+  declare paidAt: DateTime | null
+  @column()
+  declare paymentLink: string | null
+  @column()
+  declare status: string
+  @column()
+  declare totalPrice: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+  @column()
+  declare userId: number
+}
+
 export class UserInfoSchema extends BaseModel {
   static $columns = [
     'address',
