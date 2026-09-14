@@ -34,6 +34,7 @@ router
     })
 
     router.group(() => {
+      router.get('orders', [controllers.Orders, 'index']).as('orders.index')
       router.post('orders/checkout', [controllers.Orders, 'checkout']).as('orders.checkout')
       router
         .patch('orders/:id/status', [controllers.Orders, 'updateOrderStatus'])

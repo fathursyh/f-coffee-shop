@@ -7,6 +7,18 @@ import OrderItem from '#models/order_item'
 import Payment from '#models/payment'
 
 export default class OrdersController {
+  async index({ auth, inertia }: HttpContext) {
+    const user = auth.user!
+
+    const orders: Order[] = await Order.query()
+      .where('user_id', user.id)
+      .preload('items')
+      .preload('payment')
+      .orderBy('created_at', 'desc')
+
+    return inertia.render('orders', { orders } as any)
+  }
+
   async checkout({ auth, response, session }: HttpContext) {
     const user = auth.user!
 

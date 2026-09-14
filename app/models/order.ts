@@ -11,11 +11,11 @@ export default class Order extends compose(
   OrderSchema,
   omitColumns('subtotal', 'shippingCost', 'totalAmount')
 ) {
-  @column()
+  @column({ serialize: (value) => Number(value) })
   declare subtotal: number
-  @column()
+  @column({ serialize: (value) => Number(value) })
   declare shippingCost: number
-  @column()
+  @column({ serialize: (value) => Number(value).toFixed(2) })
   declare totalAmount: number
 
   @belongsTo(() => User)

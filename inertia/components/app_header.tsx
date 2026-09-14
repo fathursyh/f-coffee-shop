@@ -38,7 +38,11 @@ export default function AppHeader({ user }: AppHeaderProps) {
                 </Menu.Target>
 
                 <Menu.Dropdown>
-                  <Menu.Item component={Link} route="home" leftSection={<IconCoffee size={14} />}>
+                  <Menu.Item
+                    component={Link}
+                    route="orders.index"
+                    leftSection={<IconCoffee size={14} />}
+                  >
                     My Orders
                   </Menu.Item>
                   <Form route="session.destroy">

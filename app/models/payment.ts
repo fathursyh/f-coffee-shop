@@ -7,7 +7,7 @@ import { compose } from '@adonisjs/core/helpers'
 import { omitColumns } from '#database/schema_helper'
 
 export default class Payment extends compose(PaymentSchema, omitColumns('totalPrice')) {
-  @column()
+  @column({ serialize: (value) => Number(value) })
   declare totalPrice: number
 
   @belongsTo(() => Order)

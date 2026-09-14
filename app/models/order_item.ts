@@ -10,9 +10,9 @@ export default class OrderItem extends compose(
   OrderItemSchema,
   omitColumns('subtotal', 'unitPrice')
 ) {
-  @column()
+  @column({ serialize: (value) => Number(value) })
   declare unitPrice: number
-  @column()
+  @column({ serialize: (value) => Number(value) })
   declare subtotal: number
 
   @belongsTo(() => Order)
