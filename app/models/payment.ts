@@ -1,10 +1,15 @@
 import { PaymentSchema } from '#database/schema'
-import { belongsTo } from '@adonisjs/lucid/orm'
+import { belongsTo, column } from '@adonisjs/lucid/orm'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import User from './user.ts'
 import Order from './order.ts'
+import { compose } from '@adonisjs/core/helpers'
+import { omitColumns } from '#database/schema_helper'
 
-export default class Payment extends PaymentSchema {
+export default class Payment extends compose(PaymentSchema, omitColumns('totalPrice')) {
+  @column()
+  declare totalPrice: number
+
   @belongsTo(() => Order)
   declare order: BelongsTo<typeof Order>
 

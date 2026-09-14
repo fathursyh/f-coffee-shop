@@ -7,7 +7,7 @@ import OrderItem from '#models/order_item'
 import Payment from '#models/payment'
 
 export default class OrdersController {
-  async checkout({ auth, response }: HttpContext) {
+  async checkout({ auth, response, session }: HttpContext) {
     const user = auth.user!
 
     return await db.transaction(async (trx) => {
@@ -16,18 +16,17 @@ export default class OrdersController {
         .preload('coffee')
 
       if (cartItems.length === 0) {
-        return response.badRequest({ message: 'Cart is empty' })
+        session.flash('error', 'Cart is empty.')
+        return response.redirect().back()
       }
 
       const userInfo = await UserInfo.query({ client: trx }).where('user_id', user.id).first()
 
       if (!userInfo) {
-        return response.badRequest({
-          message: 'Shipping information missing. Please add your delivery address.',
-        })
+        session.flash('error', 'Please complete your user information before checking out.')
+        return response.redirect().toRoute('user_info.create')
       }
 
-      // 3. Compute totals
       const subtotal = cartItems.reduce((sum, item) => sum + Number(item.price) * item.quantity, 0)
       const freeShippingThreshold = 45
       const shippingCost = subtotal >= freeShippingThreshold ? 0 : 4.99
@@ -66,7 +65,7 @@ export default class OrdersController {
       await OrderItem.createMany(orderItemsPayload, { client: trx })
 
       // 6. Create UNPAID Payment record
-      const payment = await Payment.create(
+      await Payment.create(
         {
           orderId: order.id,
           userId: user.id,
@@ -79,13 +78,24 @@ export default class OrdersController {
 
       await Cart.query({ client: trx }).where('user_id', user.id).delete()
 
-      return response.created({
-        message: 'Order created successfully',
-        orderId: order.id,
-        paymentId: payment.id,
-        paymentStatus: payment.status,
-        totalAmount,
-      })
+      session.flash('success', 'Order created successfully. Please proceed to payment.')
+      return response.redirect().toRoute('home')
+    })
+  }
+
+  /**
+   * Quick status updater for testing fulfillment transitions
+   */
+  async updateOrderStatus({ params, request, response }: HttpContext) {
+    const { status } = request.only(['status']) // 'PENDING' | 'ROASTING' | 'SHIPPED' | 'DELIVERED'
+
+    const order = await Order.findOrFail(params.orderId)
+    order.status = status
+    await order.save()
+
+    return response.ok({
+      message: `Order status updated to ${status}`,
+      order,
     })
   }
 }

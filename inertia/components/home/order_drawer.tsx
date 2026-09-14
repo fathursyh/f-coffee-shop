@@ -21,7 +21,6 @@ import {
   IconShoppingBag,
 } from '@tabler/icons-react'
 import { useMediaQuery } from '@mantine/hooks'
-import { toast } from 'sonner'
 import type Cart from '#models/cart'
 import classes from './order_drawer.module.css'
 
@@ -239,9 +238,6 @@ export default function OrderDrawer({
                 mt="xs"
                 onClick={() => {
                   onConfirmOrder()
-                  toast.success(
-                    'Roastery order received! We will begin roasting your custom batch on Thursday.'
-                  )
                   onClose()
                 }}
               >

@@ -40,20 +40,4 @@ export default class PaymentsController {
       })
     })
   }
-
-  /**
-   * Quick status updater for testing fulfillment transitions
-   */
-  async updateOrderStatus({ params, request, response }: HttpContext) {
-    const { status } = request.only(['status']) // 'PENDING' | 'ROASTING' | 'SHIPPED' | 'DELIVERED'
-
-    const order = await Order.findOrFail(params.orderId)
-    order.status = status
-    await order.save()
-
-    return response.ok({
-      message: `Order status updated to ${status}`,
-      order,
-    })
-  }
 }

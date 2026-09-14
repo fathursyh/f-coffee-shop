@@ -32,5 +32,14 @@ router
       router.resource('carts', controllers.Carts).except(['create', 'edit', 'index'])
       router.delete('carts', [controllers.Carts, 'clear']).as('carts.clear')
     })
+
+    router.group(() => {
+      router.post('orders/checkout', [controllers.Orders, 'checkout']).as('orders.checkout')
+      router
+        .patch('orders/:id/status', [controllers.Orders, 'updateOrderStatus'])
+        .as('orders.updateStatus')
+    })
+
+    router.resource('user_info', controllers.Users).only(['create', 'store'])
   })
   .use(middleware.auth())

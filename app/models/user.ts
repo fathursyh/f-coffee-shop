@@ -2,10 +2,11 @@ import { UserSchema } from '#database/schema'
 import hash from '@adonisjs/core/services/hash'
 import { compose } from '@adonisjs/core/helpers'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
-import { column, hasMany } from '@adonisjs/lucid/orm'
+import { column, hasMany, hasOne } from '@adonisjs/lucid/orm'
 import type { UserRole } from '#database/migrations/1761885935168_create_users_table'
 import Cart from './cart.ts'
-import type { HasMany } from '@adonisjs/lucid/types/relations'
+import type { HasMany, HasOne } from '@adonisjs/lucid/types/relations'
+import UserInfo from './user_info.ts'
 
 export default class User extends compose(UserSchema, withAuthFinder(hash)) {
   @column()
@@ -13,6 +14,9 @@ export default class User extends compose(UserSchema, withAuthFinder(hash)) {
 
   @hasMany(() => Cart)
   declare cart: HasMany<typeof Cart>
+
+  @hasOne(() => UserInfo)
+  declare userInfo: HasOne<typeof UserInfo>
 
   get initials() {
     const [first, last] = this.fullName ? this.fullName.split(' ') : this.email.split('@')

@@ -177,8 +177,9 @@ export default function useCart(dbCart: Cart[] = []) {
 
   const handleConfirmOrder = () => {
     if (user) {
-      router.delete(
-        { route: 'carts.clear' },
+      router.post(
+        { route: 'orders.checkout' },
+        {},
         {
           preserveScroll: true,
           onSuccess: () => {

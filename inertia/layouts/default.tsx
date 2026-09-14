@@ -28,7 +28,7 @@ export default function Layout({ children }: { children: ReactElement<Data.Share
       <AppHeader user={user} />
       <AppShell.Main bg="coffee.0">{children}</AppShell.Main>
 
-      <Toaster position="bottom-right" richColors />
+      <Toaster position="top-center" richColors />
     </AppShell>
   )
 }
