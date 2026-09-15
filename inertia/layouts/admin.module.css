@@ -1,0 +1,25 @@
+.header {
+  border-bottom: 1px solid var(--mantine-color-coffee-2);
+  background-color: #ffffff;
+}
+
+.navbar {
+  border-right: 1px solid var(--mantine-color-coffee-2);
+  background-color: #ffffff;
+}
+
+.main {
+  min-height: calc(100vh - 64px);
+}
+
+.contentWrapper {
+  padding: var(--mantine-spacing-xl);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+@media (max-width: 48em) {
+  .contentWrapper {
+    padding: var(--mantine-spacing-md);
+  }
+}

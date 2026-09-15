@@ -1,0 +1,42 @@
+.navbar {
+  background-color: #ffffff;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  padding: 16px 16px 14px 16px;
+  border-bottom: 1px solid var(--mantine-color-coffee-2);
+}
+
+.brandLink {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.links {
+  flex: 1;
+}
+
+.linksInner {
+  padding: 14px 12px;
+}
+
+.sectionTitle {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--mantine-color-coffee-6);
+  padding: 10px 12px 4px 12px;
+}
+
+.footer {
+  border-top: 1px solid var(--mantine-color-coffee-2);
+  padding: 10px 12px;
+  background-color: var(--mantine-color-coffee-0);
+}

@@ -29,7 +29,7 @@ router
 
     router.group(() => {
       router.post('carts/sync', [controllers.Carts, 'sync']).as('carts.sync')
-      router.resource('carts', controllers.Carts).except(['create', 'edit', 'index'])
+      router.resource('carts', controllers.Carts).only(['store', 'update', 'destroy'])
       router.delete('carts', [controllers.Carts, 'clear']).as('carts.clear')
     })
 
@@ -42,5 +42,12 @@ router
     })
 
     router.resource('user_info', controllers.Users).only(['create', 'store'])
+
+    router
+      .group(() => {
+        router.get('dashboard', [controllers.Admin, 'dashboard']).as('dashboard')
+      })
+      .prefix('admin')
+      .as('admin')
   })
   .use(middleware.auth())
