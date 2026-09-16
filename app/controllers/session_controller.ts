@@ -9,7 +9,6 @@ export default class SessionController {
 
   async store({ request, auth, session, response }: HttpContext) {
     const { email, password } = await request.validateUsing(loginValidator)
-
     try {
       const user = await User.verifyCredentials(email, password)
       await auth.use('web').login(user)
@@ -17,6 +16,7 @@ export default class SessionController {
       response.redirect().toRoute('home')
     } catch (err) {
       session.flash('error', 'Something is wrong!')
+      console.log(err)
       response.redirect().back('/login')
     }
   }

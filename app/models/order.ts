@@ -6,6 +6,7 @@ import OrderItem from './order_item.ts'
 import Payment from './payment.ts'
 import { compose } from '@adonisjs/core/helpers'
 import { omitColumns } from '#database/schema_helper'
+import type { OrderStatus } from '#database/migrations/1789290844108_create_orders_table'
 
 export default class Order extends compose(
   OrderSchema,
@@ -17,6 +18,9 @@ export default class Order extends compose(
   declare shippingCost: number
   @column({ serialize: (value) => Number(value).toFixed(2) })
   declare totalAmount: number
+
+  @column()
+  declare status: OrderStatus
 
   @belongsTo(() => User)
   declare user: BelongsTo<typeof User>

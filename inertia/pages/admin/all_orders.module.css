@@ -1,0 +1,47 @@
+.dashboardBox {
+  min-height: 100vh;
+  background-color: var(--mantine-color-coffee-0, #fcfaf7);
+}
+
+.pageTitle {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.tablePaper {
+  background-color: var(--mantine-color-white);
+  border: 1px solid var(--mantine-color-coffee-2, #ece4db);
+  box-shadow: 0 4px 20px rgba(78, 52, 46, 0.04);
+}
+
+.searchInput {
+  flex: 1;
+  min-width: 260px;
+}
+
+.tableHead {
+  background-color: var(--mantine-color-coffee-0, #fdfbf9);
+  border-bottom: 1px solid var(--mantine-color-coffee-2, #ece4db);
+}
+
+.tableHead th {
+  color: var(--mantine-color-coffee-9, #3e2723);
+  font-size: var(--mantine-font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+.tableRow {
+  transition: background-color 150ms ease;
+}
+
+.tableRow:hover {
+  background-color: var(--mantine-color-coffee-0, #faf7f2);
+}
+
+.tableFooter {
+  border-top: 1px solid var(--mantine-color-coffee-1, #f3ece4);
+}

@@ -9,7 +9,6 @@ import OrderDrawer from '~/components/home/order_drawer'
 import useCart from '~/hooks/use_cart'
 import type Cart from '#models/cart'
 import type Coffee from '#models/coffee'
-import { Link } from '@adonisjs/inertia/react'
 
 interface HomeProps {
   coffee: Coffee[]

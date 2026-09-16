@@ -1,5 +1,5 @@
 import { Form, Link } from '@adonisjs/inertia/react'
-import { IconCoffee, IconDashboard, IconLogin2, IconLogout } from '@tabler/icons-react'
+import { IconCoffee, IconLogin2, IconLogout } from '@tabler/icons-react'
 import { AppShell, Avatar, Box, Button, Container, Group, Menu, Title } from '@mantine/core'
 import { type InertiaProps } from '~/types'
 import classes from './app_header.module.css'
@@ -38,18 +38,7 @@ export default function AppHeader({ user }: AppHeaderProps) {
                 </Menu.Target>
 
                 <Menu.Dropdown>
-                  <Menu.Item
-                    component={Link}
-                    route="admin.dashboard"
-                    leftSection={<IconDashboard size={14} />}
-                  >
-                    Dashboard
-                  </Menu.Item>
-                  <Menu.Item
-                    component={Link}
-                    route="orders.index"
-                    leftSection={<IconCoffee size={14} />}
-                  >
+                  <Menu.Item component={Link} route="home" leftSection={<IconCoffee size={14} />}>
                     My Orders
                   </Menu.Item>
                   <Form route="session.destroy">
