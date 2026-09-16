@@ -1,5 +1,5 @@
 import { Form, Link } from '@adonisjs/inertia/react'
-import { IconChevronRight, IconCoffee, IconLogout, IconShoppingBag } from '@tabler/icons-react'
+import { IconChevronRight, IconLogout, IconSettings } from '@tabler/icons-react'
 import { Avatar, Badge, Box, Divider, Group, Menu, Text, UnstyledButton } from '@mantine/core'
 import { type InertiaProps } from '~/types'
 import classes from './user_button.module.css'
@@ -68,16 +68,8 @@ export function UserButton({ user }: UserButtonProps) {
           </Badge>
         </div>
 
-        <Menu.Item component={Link} route="home" leftSection={<IconCoffee size={14} />}>
-          Storefront
-        </Menu.Item>
-
-        <Menu.Item
-          component={Link}
-          route="orders.index"
-          leftSection={<IconShoppingBag size={14} />}
-        >
-          Customer Orders
+        <Menu.Item component={Link} route="orders.index" leftSection={<IconSettings size={14} />}>
+          Setting
         </Menu.Item>
 
         <Divider my={4} color="coffee.1" />

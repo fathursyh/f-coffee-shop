@@ -1,10 +1,10 @@
 import {
-  IconAdjustments,
   IconCoffee,
+  IconDatabase,
   IconFlame,
   IconGauge,
+  IconReportAnalytics,
   IconShoppingBag,
-  IconTruckDelivery,
 } from '@tabler/icons-react'
 import { Badge, Box, Group, ScrollArea, Text, ThemeIcon } from '@mantine/core'
 import { Link } from '@adonisjs/inertia/react'
@@ -23,52 +23,45 @@ const navSections: NavSection[] = [
     title: 'Operations',
     items: [
       {
-        label: 'Dashboard',
+        label: 'Overview',
         icon: IconGauge,
-        link: '/admin/dashboard',
+        link: 'admin.dashboard',
       },
       {
         label: 'Orders',
         icon: IconShoppingBag,
         initiallyOpened: true,
         badge: 'Live',
+        link: undefined,
         links: [
-          { label: 'All Orders', link: '/orders' },
-          { label: 'Pending Roast', link: '/orders' },
+          { label: 'All Orders', link: 'admin.orders' },
+          { label: 'Pending Roast', link: 'admin.roast' },
         ],
       },
       {
         label: 'Bean Catalog',
         icon: IconFlame,
+        link: undefined,
+        initiallyOpened: true,
         links: [
-          { label: 'Current Roasts', link: '/#coffee-menu' },
-          { label: 'Brew & Grind Guide', link: '/#brew-guide' },
+          { label: 'Current Roasts', link: 'admin.coffees' },
+          // { label: 'Brew & Grind Guide', link: '/#brew-guide' },
         ],
       },
     ],
   },
   {
-    title: 'Store & Fulfillment',
+    title: 'Data & Reports',
     items: [
       {
-        label: 'Customer Addresses',
-        icon: IconTruckDelivery,
-        link: '/user_info/create',
+        label: 'Customer Data',
+        icon: IconDatabase,
+        link: 'admin.customers',
       },
       {
-        label: 'Public Storefront',
-        icon: IconCoffee,
-        link: '/',
-      },
-    ],
-  },
-  {
-    title: 'System',
-    items: [
-      {
-        label: 'Roastery Settings',
-        icon: IconAdjustments,
-        link: '/admin/dashboard',
+        label: 'Reports',
+        icon: IconReportAnalytics,
+        link: 'admin.reports',
       },
     ],
   },

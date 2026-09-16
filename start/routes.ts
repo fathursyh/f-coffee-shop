@@ -10,6 +10,7 @@
 import { middleware } from '#start/kernel'
 import { controllers } from '#generated/controllers'
 import router from '@adonisjs/core/services/router'
+import { throttle } from './limiter.ts'
 
 router.get('/', [controllers.Publics, 'home']).as('home')
 
@@ -22,6 +23,7 @@ router
     router.post('login', [controllers.Session, 'store'])
   })
   .use(middleware.guest())
+  .use(throttle)
 
 router
   .group(() => {
@@ -46,8 +48,15 @@ router
     router
       .group(() => {
         router.get('dashboard', [controllers.Admin, 'dashboard']).as('dashboard')
+        router.get('all-orders', [controllers.Admin, 'allOrders']).as('orders')
+        router.get('pending-roast', [controllers.Admin, 'pendingRoast']).as('roast')
+        router.get('customer-data', [controllers.Admin, 'customerData']).as('customers')
+        router.get('coffee-data', [controllers.Admin, 'coffeeData']).as('coffees')
+        router.get('reports', [controllers.Admin, 'reports']).as('reports')
       })
       .prefix('admin')
       .as('admin')
+      .use(middleware.authorize({ role: 'ADMIN' }))
+      .use(throttle)
   })
   .use(middleware.auth())

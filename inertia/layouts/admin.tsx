@@ -1,7 +1,7 @@
 import { type Data } from '@generated/data'
 import { toast, Toaster } from 'sonner'
 import { type ReactElement, useEffect } from 'react'
-import { AppShell, Badge, Burger, Button, Group, Text } from '@mantine/core'
+import { AppShell, Badge, Burger, Button, Group } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { IconCoffee, IconExternalLink } from '@tabler/icons-react'
 import { AppSidebar } from '~/components/app_sidebar'
@@ -61,9 +61,6 @@ export default function AdminLayout({ children }: { children: ReactElement<Data.
               >
                 Roastery Operations
               </Badge>
-              <Text size="xs" c="coffee.6" fw={600} visibleFrom="sm">
-                Admin Console
-              </Text>
             </Group>
           </Group>
 

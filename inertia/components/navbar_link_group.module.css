@@ -17,6 +17,7 @@
   color: var(--mantine-color-coffee-9);
 }
 
+.control[data-active],
 .activeControl {
   background-color: var(--mantine-color-coffee-1) !important;
   color: var(--mantine-color-coffee-9) !important;
@@ -64,12 +65,14 @@
   transform: translateY(-50%) scale(1.3);
 }
 
+.link[data-active],
 .activeLink {
   background-color: var(--mantine-color-coffee-1);
   color: var(--mantine-color-coffee-9) !important;
   font-weight: 600;
 }
 
+.link[data-active]::before,
 .activeLink::before {
   background-color: var(--mantine-color-coffee-7);
   width: 6px;
