@@ -11,52 +11,30 @@ import { middleware } from '#start/kernel'
 import { controllers } from '#generated/controllers'
 import router from '@adonisjs/core/services/router'
 import { throttle } from './limiter.ts'
+import registerAdminOrderRoutes from './routes/admin/orders_routes.ts'
+import registerAuthRoutes from './routes/auth_routes.ts'
+import registerPublicOrderRoutes from './routes/order_routes.ts'
+import registerPublicCartRoutes from './routes/cart_routes.ts'
+import registerUserRoutes from './routes/user_routes.ts'
 
 router.get('/', [controllers.Publics, 'home']).as('home')
 
-router
-  .group(() => {
-    router.get('register', [controllers.NewAccount, 'create'])
-    router.post('register', [controllers.NewAccount, 'store'])
-
-    router.get('login', [controllers.Session, 'create'])
-    router.post('login', [controllers.Session, 'store'])
-  })
-  .use(middleware.guest())
-  .use(throttle)
+registerAuthRoutes(router)
+registerPublicOrderRoutes(router)
+registerPublicCartRoutes(router)
+registerUserRoutes(router)
 
 router
   .group(() => {
-    router.post('logout', [controllers.Session, 'destroy'])
-
-    router.group(() => {
-      router.post('carts/sync', [controllers.Carts, 'sync']).as('carts.sync')
-      router.resource('carts', controllers.Carts).only(['store', 'update', 'destroy'])
-      router.delete('carts', [controllers.Carts, 'clear']).as('carts.clear')
-    })
-
-    router.group(() => {
-      router.get('orders', [controllers.Orders, 'index']).as('orders.index')
-      router.post('orders/checkout', [controllers.Orders, 'checkout']).as('orders.checkout')
-      router
-        .patch('orders/:id/status', [controllers.Orders, 'updateOrderStatus'])
-        .as('orders.updateStatus')
-    })
-
-    router.resource('user_info', controllers.Users).only(['create', 'store'])
-
-    router
-      .group(() => {
-        router.get('dashboard', [controllers.Admin, 'dashboard']).as('dashboard')
-        router.get('all-orders', [controllers.Admin, 'allOrders']).as('orders')
-        router.get('pending-roast', [controllers.Admin, 'pendingRoast']).as('roast')
-        router.get('customer-data', [controllers.Admin, 'customerData']).as('customers')
-        router.get('coffee-data', [controllers.Admin, 'coffeeData']).as('coffees')
-        router.get('reports', [controllers.Admin, 'reports']).as('reports')
-      })
-      .prefix('admin')
-      .as('admin')
-      .use(middleware.authorize({ role: 'ADMIN' }))
-      .use(throttle)
+    router.get('dashboard', [controllers.Admin, 'dashboard']).as('dashboard')
+    registerAdminOrderRoutes(router)
+    router.get('pendings', [controllers.Admin, 'pendingRoast']).as('roast')
+    router.get('customers', [controllers.Admin, 'customerData']).as('customers')
+    router.get('coffees', [controllers.Admin, 'coffeeData']).as('coffees')
+    router.get('reports', [controllers.Admin, 'reports']).as('reports')
   })
+  .prefix('admin')
+  .as('admin')
   .use(middleware.auth())
+  .use(middleware.authorize({ role: 'ADMIN' }))
+  .use(throttle)

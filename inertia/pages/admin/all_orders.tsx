@@ -34,7 +34,7 @@ import {
 } from '@tabler/icons-react'
 import classes from './all_orders.module.css'
 import type { OrderStatus } from '#database/migrations/1789290844108_create_orders_table'
-import { client } from '~/client'
+import { client, urlFor } from '~/client'
 import { type PaginatedProps } from '~/types'
 import { type Data } from '@generated/data'
 
@@ -87,9 +87,10 @@ export default function AllOrders({ orders, filters }: AllOrderProps) {
     applyFilters({ page: newPage })
   }
 
-  const handleUpdateOrderStatus = (orderId: number, nextStatus: OrderStatus) => {
+  const handleUpdateOrderStatus = (order: Data.Order, nextStatus: OrderStatus) => {
+    if (nextStatus === order.status) return
     router.patch(
-      `/admin/orders/${orderId}/status`,
+      urlFor('admin.orders.updateStatus', { id: order.id }),
       { status: nextStatus },
       {
         preserveScroll: true,
@@ -228,19 +229,19 @@ export default function AllOrders({ orders, filters }: AllOrderProps) {
                 <Menu.Label>Update Status</Menu.Label>
                 <Menu.Item
                   leftSection={<IconFlame size={14} color="var(--mantine-color-coffee-6)" />}
-                  onClick={() => handleUpdateOrderStatus(order.id, 'ROASTING')}
+                  onClick={() => handleUpdateOrderStatus(order, 'ROASTING')}
                 >
                   Mark as Roasting
                 </Menu.Item>
                 <Menu.Item
                   leftSection={<IconTruckDelivery size={14} />}
-                  onClick={() => handleUpdateOrderStatus(order.id, 'SHIPPED')}
+                  onClick={() => handleUpdateOrderStatus(order, 'SHIPPED')}
                 >
                   Mark as Shipped
                 </Menu.Item>
                 <Menu.Item
                   leftSection={<IconCheck size={14} />}
-                  onClick={() => handleUpdateOrderStatus(order.id, 'DELIVERED')}
+                  onClick={() => handleUpdateOrderStatus(order, 'DELIVERED')}
                 >
                   Mark as Delivered
                 </Menu.Item>
@@ -248,7 +249,7 @@ export default function AllOrders({ orders, filters }: AllOrderProps) {
                 <Menu.Item
                   color="red"
                   leftSection={<IconX size={14} />}
-                  onClick={() => handleUpdateOrderStatus(order.id, 'CANCELLED')}
+                  onClick={() => handleUpdateOrderStatus(order, 'CANCELLED')}
                 >
                   Cancel Order
                 </Menu.Item>

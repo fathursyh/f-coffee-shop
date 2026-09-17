@@ -1,5 +1,6 @@
 import { createUserInfoValidator } from '#validators/user_info'
 import { type HttpContext } from '@adonisjs/core/http'
+import { ToastEnum } from '../enums/toast_enum.ts'
 
 export default class UsersController {
   create({ inertia }: HttpContext) {
@@ -10,10 +11,10 @@ export default class UsersController {
     const validatedData = await request.validateUsing(createUserInfoValidator)
     try {
       await auth.user!.related('userInfo').create(validatedData)
-      session.flash('success', 'User information saved successfully.')
+      session.flash(ToastEnum.SUCCESS, 'User information saved successfully.')
       return response.redirect().toRoute('home')
     } catch (err) {
-      session.flash('error', 'Failed to save user information. Please try again.')
+      session.flash(ToastEnum.ERROR, 'Failed to save user information. Please try again.')
       return response.redirect().back()
     }
   }

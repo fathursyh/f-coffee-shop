@@ -5,6 +5,8 @@ import UserInfo from '#models/user_info'
 import Order from '#models/order'
 import OrderItem from '#models/order_item'
 import Payment from '#models/payment'
+import { updateOrderStatusValidator } from '#validators/update_order_status'
+import { ToastEnum } from '../enums/toast_enum.ts'
 
 export default class OrdersController {
   async index({ auth, inertia }: HttpContext) {
@@ -28,14 +30,14 @@ export default class OrdersController {
         .preload('coffee')
 
       if (cartItems.length === 0) {
-        session.flash('error', 'Cart is empty.')
+        session.flash(ToastEnum.ERROR, 'Cart is empty.')
         return response.redirect().back()
       }
 
       const userInfo = await UserInfo.query({ client: trx }).where('user_id', user.id).first()
 
       if (!userInfo) {
-        session.flash('error', 'Please complete your user information before checking out.')
+        session.flash(ToastEnum.ERROR, 'Please complete your user information before checking out.')
         return response.redirect().toRoute('user_info.create')
       }
 
@@ -90,7 +92,7 @@ export default class OrdersController {
 
       await Cart.query({ client: trx }).where('user_id', user.id).delete()
 
-      session.flash('success', 'Order created successfully. Please proceed to payment.')
+      session.flash(ToastEnum.SUCCESS, 'Order created successfully. Please proceed to payment.')
       return response.redirect().toRoute('home')
     })
   }
@@ -98,16 +100,17 @@ export default class OrdersController {
   /**
    * Quick status updater for testing fulfillment transitions
    */
-  async updateOrderStatus({ params, request, response }: HttpContext) {
-    const { status } = request.only(['status']) // 'PENDING' | 'ROASTING' | 'SHIPPED' | 'DELIVERED'
-
-    const order = await Order.findOrFail(params.orderId)
+  async updateOrderStatus({ params, request, response, session }: HttpContext) {
+    const { status } = await request.validateUsing(updateOrderStatusValidator)
+    const order = await Order.findOrFail(params.id)
+    if (order.status === 'CANCELLED') {
+      session.flash(ToastEnum.ERROR, 'Cancelled orders cannot be updated.')
+      return response.redirect().back()
+    }
     order.status = status
     await order.save()
 
-    return response.ok({
-      message: `Order status updated to ${status}`,
-      order,
-    })
+    session.flash(ToastEnum.SUCCESS, `Order status updated to ${status}.`)
+    return response.redirect().back()
   }
 }

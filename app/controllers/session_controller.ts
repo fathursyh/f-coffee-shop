@@ -1,6 +1,7 @@
 import User from '#models/user'
 import { loginValidator } from '#validators/user'
 import type { HttpContext } from '@adonisjs/core/http'
+import { ToastEnum } from '../enums/toast_enum.ts'
 
 export default class SessionController {
   async create({ inertia }: HttpContext) {
@@ -12,10 +13,10 @@ export default class SessionController {
     try {
       const user = await User.verifyCredentials(email, password)
       await auth.use('web').login(user)
-      session.flash('success', 'You have successfully logged in!')
+      session.flash(ToastEnum.SUCCESS, 'You have successfully logged in!')
       response.redirect().toRoute('home')
     } catch (err) {
-      session.flash('error', 'Something is wrong!')
+      session.flash(ToastEnum.ERROR, 'Something is wrong!')
       console.log(err)
       response.redirect().back('/login')
     }
@@ -23,7 +24,7 @@ export default class SessionController {
 
   async destroy({ auth, response, session }: HttpContext) {
     await auth.use('web').logout()
-    session.flash('success', 'You have successfully logged out!')
+    session.flash(ToastEnum.SUCCESS, 'You have successfully logged out!')
     response.redirect().toRoute('home')
   }
 }

@@ -1,6 +1,6 @@
 import { BaseSchema } from '@adonisjs/lucid/schema'
 
-const orderStatus = ['PENDING', 'ROASTING', 'SHIPPED', 'DELIVERED', 'CANCELLED'] as const
+export const orderStatus = ['PENDING', 'ROASTING', 'SHIPPED', 'DELIVERED', 'CANCELLED'] as const
 export type OrderStatus = (typeof orderStatus)[number]
 
 export default class extends BaseSchema {

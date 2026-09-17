@@ -1,6 +1,7 @@
 import { type UserRole } from '#database/migrations/1761885935168_create_users_table'
 import type { HttpContext } from '@adonisjs/core/http'
 import type { NextFn } from '@adonisjs/core/types/http'
+import { ToastEnum } from '../enums/toast_enum.ts'
 
 type AuthorizationOptions = { permissions: string[] } | { role: UserRole }
 
@@ -23,7 +24,7 @@ export default class AuthorizeRequestMiddleware {
      * Check if the user has the required role
      */
     if ('role' in options && user.role !== options.role) {
-      session.flash('error', 'You are not authorized to access this page.')
+      session.flash(ToastEnum.ERROR, 'You are not authorized to access this page.')
       return response.redirect().toRoute('home', {})
     }
 
