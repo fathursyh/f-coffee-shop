@@ -47,7 +47,6 @@ interface AllOrderProps {
 }
 
 export default function AllOrders({ orders, filters }: AllOrderProps) {
-  console.log(orders)
   const [isPending, startTransition] = useTransition()
   const [search, setSearch] = useState(filters?.search || '')
   const [statusFilter, setStatusFilter] = useState<string | null>(filters?.status || 'ALL')
@@ -89,6 +88,7 @@ export default function AllOrders({ orders, filters }: AllOrderProps) {
 
   const handleUpdateOrderStatus = (order: Data.Order, nextStatus: OrderStatus) => {
     if (nextStatus === order.status) return
+    if (nextStatus === 'CANCELLED' && !confirm('Cancel this order?')) return
     router.patch(
       urlFor('admin.orders.updateStatus', { id: order.id }),
       { status: nextStatus },

@@ -2,9 +2,10 @@ import type { HttpContext } from '@adonisjs/core/http'
 import type { NextFn } from '@adonisjs/core/types/http'
 import UserTransformer from '#transformers/user_transformer'
 import BaseInertiaMiddleware from '@adonisjs/inertia/inertia_middleware'
+import db from '@adonisjs/lucid/services/db'
 
 export default class InertiaMiddleware extends BaseInertiaMiddleware {
-  share(ctx: HttpContext) {
+  async share(ctx: HttpContext) {
     /**
      * The share method is called everytime an Inertia page is rendered. In
      * certain cases, a page may get rendered before the session middleware
@@ -19,9 +20,27 @@ export default class InertiaMiddleware extends BaseInertiaMiddleware {
      * Data shared with all Inertia pages. Make sure you are using
      * transformers for rich data-types like Models.
      */
+
+    const isAdmin = auth?.user?.role === 'ADMIN'
+    const isAdminRoute = ctx.request.url().startsWith('/admin')
+
+    let pendingCoffees = { count: 0 }
+
+    if (isAdmin && isAdminRoute) {
+      const result = await db
+        .from('orders')
+        .whereNot('status', 'CANCELLED')
+        .andWhereNot('status', 'DELIVERED')
+        .count('* as count')
+        .first()
+
+      pendingCoffees = { count: Number(result?.count ?? 0) }
+    }
+
     return {
       errors: ctx.inertia.always(this.getValidationErrors(ctx)),
       user: ctx.inertia.always(auth?.user ? UserTransformer.transform(auth.user) : undefined),
+      pendingCoffees: ctx.inertia.always(pendingCoffees),
     }
   }
 

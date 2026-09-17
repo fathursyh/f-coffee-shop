@@ -12,60 +12,13 @@ import { LinksGroup, type LinksGroupProps } from './navbar_link_group'
 import { UserButton } from './user_button'
 import { type InertiaProps } from '~/types'
 import classes from './app_sidebar.module.css'
+import { usePage } from '@inertiajs/react'
+import { useMemo } from 'react'
 
 interface NavSection {
   title?: string
   items: LinksGroupProps[]
 }
-
-const navSections: NavSection[] = [
-  {
-    title: 'Operations',
-    items: [
-      {
-        label: 'Overview',
-        icon: IconGauge,
-        link: 'admin.dashboard',
-      },
-      {
-        label: 'Orders',
-        icon: IconShoppingBag,
-        initiallyOpened: true,
-        badge: 'Live',
-        link: undefined,
-        links: [
-          { label: 'All Orders', link: 'admin.orders' },
-          { label: 'Pending Roast', link: 'admin.roast' },
-        ],
-      },
-      {
-        label: 'Bean Catalog',
-        icon: IconFlame,
-        link: undefined,
-        initiallyOpened: true,
-        links: [
-          { label: 'Current Roasts', link: 'admin.coffees' },
-          // { label: 'Brew & Grind Guide', link: '/#brew-guide' },
-        ],
-      },
-    ],
-  },
-  {
-    title: 'Data & Reports',
-    items: [
-      {
-        label: 'Customer Data',
-        icon: IconDatabase,
-        link: 'admin.customers',
-      },
-      {
-        label: 'Reports',
-        icon: IconReportAnalytics,
-        link: 'admin.reports',
-      },
-    ],
-  },
-]
 
 interface AppSidebarProps {
   user?: InertiaProps['user']
@@ -73,6 +26,59 @@ interface AppSidebarProps {
 }
 
 export function AppSidebar({ user, onNavigate }: AppSidebarProps) {
+  const { pendingCoffees } = usePage().props
+
+  const navSections: NavSection[] = useMemo(
+    () => [
+      {
+        title: 'Operations',
+        items: [
+          {
+            label: 'Overview',
+            icon: IconGauge,
+            link: 'admin.dashboard',
+          },
+          {
+            label: 'Orders',
+            icon: IconShoppingBag,
+            initiallyOpened: true,
+            badge: pendingCoffees.count > 0 ? pendingCoffees.count.toString() : undefined,
+            link: undefined,
+            links: [
+              { label: 'All Orders', link: 'admin.orders' },
+              { label: 'Pending Roast', link: 'admin.roast' },
+            ],
+          },
+          {
+            label: 'Bean Catalog',
+            icon: IconFlame,
+            link: undefined,
+            initiallyOpened: true,
+            links: [
+              { label: 'Current Roasts', link: 'admin.coffees' },
+              // { label: 'Brew & Grind Guide', link: '/#brew-guide' },
+            ],
+          },
+        ],
+      },
+      {
+        title: 'Data & Reports',
+        items: [
+          {
+            label: 'Customer Data',
+            icon: IconDatabase,
+            link: 'admin.customers',
+          },
+          {
+            label: 'Reports',
+            icon: IconReportAnalytics,
+            link: 'admin.reports',
+          },
+        ],
+      },
+    ],
+    [pendingCoffees.count]
+  )
   return (
     <nav className={classes.navbar}>
       <div className={classes.header}>
