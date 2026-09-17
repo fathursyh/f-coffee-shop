@@ -35,8 +35,19 @@ import {
 import classes from './all_orders.module.css'
 import type { OrderStatus } from '#database/migrations/1789290844108_create_orders_table'
 import { client } from '~/client'
+import { type PaginatedProps } from '~/types'
+import { type Data } from '@generated/data'
 
-export default function AllOrders({ orders, filters }: any) {
+interface AllOrderProps {
+  orders: PaginatedProps<Data.Order>
+  filters: {
+    search: string
+    status: OrderStatus
+  }
+}
+
+export default function AllOrders({ orders, filters }: AllOrderProps) {
+  console.log(orders)
   const [isPending, startTransition] = useTransition()
   const [search, setSearch] = useState(filters?.search || '')
   const [statusFilter, setStatusFilter] = useState<string | null>(filters?.status || 'ALL')
@@ -357,12 +368,12 @@ export default function AllOrders({ orders, filters }: any) {
 
             <Group justify="space-between" mt="md" pt="xs" className={classes.tableFooter}>
               <Text size="xs" c="dimmed">
-                Showing page <b>{orders.meta.currentPage}</b> of <b>{orders.meta.lastPage}</b> (
-                {orders.meta.total} total orders)
+                Showing page <b>{orders.metadata.currentPage}</b> of{' '}
+                <b>{orders.metadata.lastPage}</b> ({orders.metadata.total} total orders)
               </Text>
               <Pagination
-                total={orders.meta.lastPage}
-                value={orders.meta.currentPage}
+                total={orders.metadata.lastPage}
+                value={orders.metadata.currentPage}
                 onChange={handlePageChange}
                 size="sm"
                 color="coffee"
