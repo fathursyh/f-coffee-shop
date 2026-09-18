@@ -37,6 +37,7 @@ import type { OrderStatus } from '#database/migrations/1789290844108_create_orde
 import { client, urlFor } from '~/client'
 import { type PaginatedProps } from '~/types'
 import { type Data } from '@generated/data'
+import { Link } from '@adonisjs/inertia/react'
 
 interface AllOrderProps {
   orders: PaginatedProps<Data.Order>
@@ -209,6 +210,17 @@ export default function AllOrders({ orders, filters }: AllOrderProps) {
         <Table.Td align="right">
           <Group gap={6} justify="flex-end">
             <ActionIcon
+              variant="light"
+              color="coffee"
+              size="sm"
+              aria-label={`View roasts for order #${order.id}`}
+              title="View Roasting Queue"
+              onClick={() => router.visit(`/admin/orders/${order.id}/roasts`)}
+            >
+              <IconFlame size={15} />
+            </ActionIcon>
+
+            <ActionIcon
               variant="subtle"
               color="coffee"
               size="sm"
@@ -218,7 +230,7 @@ export default function AllOrders({ orders, filters }: AllOrderProps) {
               <IconEye size={16} />
             </ActionIcon>
 
-            <Menu shadow="md" width={180} position="bottom-end">
+            <Menu shadow="md" width={190} position="bottom-end">
               <Menu.Target>
                 <ActionIcon variant="subtle" color="gray" size="sm" aria-label="More actions">
                   <IconDotsVertical size={16} />
@@ -226,6 +238,17 @@ export default function AllOrders({ orders, filters }: AllOrderProps) {
               </Menu.Target>
 
               <Menu.Dropdown>
+                <Menu.Label>Order Queue</Menu.Label>
+                <Menu.Item
+                  component={Link}
+                  leftSection={<IconFlame size={14} color="var(--mantine-color-coffee-6)" />}
+                  route="admin.orders.roast.index"
+                  routeParams={{ order_id: order.id }}
+                >
+                  View Roast Items
+                </Menu.Item>
+
+                <Menu.Divider />
                 <Menu.Label>Update Status</Menu.Label>
                 <Menu.Item
                   leftSection={<IconFlame size={14} color="var(--mantine-color-coffee-6)" />}

@@ -7,8 +7,14 @@ import OrderItem from '#models/order_item'
 import Payment from '#models/payment'
 import { updateOrderStatusValidator } from '#validators/update_order_status'
 import { ToastEnum } from '../enums/toast_enum.ts'
+import { inject } from '@adonisjs/core'
+import { OrderService } from '#services/order_service'
+import { Exception } from '@adonisjs/core/exceptions'
 
+@inject()
 export default class OrdersController {
+  constructor(protected orderService: OrderService) {}
+
   async index({ auth, inertia }: HttpContext) {
     const user = auth.user!
 
@@ -100,17 +106,29 @@ export default class OrdersController {
   /**
    * Quick status updater for testing fulfillment transitions
    */
-  async updateOrderStatus({ params, request, response, session }: HttpContext) {
+  async updateOrderStatus({ params, request, response, session, inertia }: HttpContext) {
     const { status } = await request.validateUsing(updateOrderStatusValidator)
-    const order = await Order.findOrFail(params.id)
-    if (order.status === 'CANCELLED') {
-      session.flash(ToastEnum.ERROR, 'Cancelled orders cannot be updated.')
-      return response.redirect().back()
-    }
-    order.status = status
-    await order.save()
+    try {
+      const order = await Order.query().preload('items').where('id', params.id).firstOrFail()
+      if (order.status === 'CANCELLED') {
+        session.flash(ToastEnum.ERROR, 'Cancelled orders cannot be updated.')
+        return response.redirect().back()
+      }
+      if (order.status === 'DELIVERED') {
+        session.flash(ToastEnum.ERROR, 'Delivered orders cannot be updated.')
+        return response.redirect().back()
+      }
 
-    session.flash(ToastEnum.SUCCESS, `Order status updated to ${status}.`)
-    return response.redirect().back()
+      await this.orderService.updateStatus(status, order)
+
+      session.flash(ToastEnum.SUCCESS, `Order status updated to ${status}.`)
+      return response.redirect().back()
+    } catch (err) {
+      if (err instanceof Exception) {
+        session.flash(ToastEnum.ERROR, err.message)
+        return response.redirect().back()
+      }
+      return inertia.render('errors/server_error', {})
+    }
   }
 }

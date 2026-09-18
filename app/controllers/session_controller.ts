@@ -14,17 +14,19 @@ export default class SessionController {
       const user = await User.verifyCredentials(email, password)
       await auth.use('web').login(user)
       session.flash(ToastEnum.SUCCESS, 'You have successfully logged in!')
-      response.redirect().toRoute('home')
+      if (auth.user?.role === 'ADMIN') {
+        return response.redirect().toRoute('admin.dashboard')
+      }
+      return response.redirect().toRoute('home')
     } catch (err) {
       session.flash(ToastEnum.ERROR, 'Something is wrong!')
-      console.log(err)
-      response.redirect().back('/login')
+      return response.redirect().back('/login')
     }
   }
 
   async destroy({ auth, response, session }: HttpContext) {
     await auth.use('web').logout()
     session.flash(ToastEnum.SUCCESS, 'You have successfully logged out!')
-    response.redirect().toRoute('home')
+    return response.redirect().toRoute('home')
   }
 }
