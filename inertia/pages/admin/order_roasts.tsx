@@ -78,13 +78,13 @@ export default function OrderRoasts({ order, roasts, currentFilter = 'ALL' }: Or
 
   const renderRoastBadge = (status: RoastOrderStatus) => {
     switch (status) {
-      case 'pending':
+      case 'PENDING':
         return (
           <Badge variant="outline" color="yellow" radius="sm" leftSection={<IconClock size={12} />}>
             Pending
           </Badge>
         )
-      case 'done':
+      case 'DONE':
         return (
           <Badge variant="light" color="teal" radius="sm" leftSection={<IconCheck size={12} />}>
             Done
@@ -96,7 +96,7 @@ export default function OrderRoasts({ order, roasts, currentFilter = 'ALL' }: Or
   }
 
   const roastList = roasts?.data ?? []
-  const pendingCountOnPage = roastList.filter((r) => r.status === 'pending').length
+  const pendingCountOnPage = roastList.filter((r) => r.status === 'PENDING').length
 
   return (
     <Box className={classes.dashboardBox} py={{ base: 24, sm: 36 }} px={{ base: 'xs', sm: 'md' }}>
@@ -166,8 +166,8 @@ export default function OrderRoasts({ order, roasts, currentFilter = 'ALL' }: Or
                 radius="md"
                 data={[
                   { value: 'ALL', label: 'All Statuses' },
-                  { value: 'pending', label: 'Pending Only' },
-                  { value: 'done', label: 'Done' },
+                  { value: 'PENDING', label: 'Pending Only' },
+                  { value: 'DONE', label: 'Done' },
                 ]}
                 value={statusFilter}
                 onChange={handleFilterChange}
@@ -246,13 +246,13 @@ export default function OrderRoasts({ order, roasts, currentFilter = 'ALL' }: Or
 
                         <Table.Td align="right">
                           <Group gap={6} justify="flex-end">
-                            {roast.status === 'pending' ? (
+                            {roast.status === 'PENDING' ? (
                               <Button
                                 size="compact-xs"
                                 color="coffee"
                                 variant="light"
                                 leftSection={<IconFlame size={12} />}
-                                onClick={() => handleUpdateRoastStatus(roast.id, 'done')}
+                                onClick={() => handleUpdateRoastStatus(roast.id, 'DONE')}
                               >
                                 Mark Done
                               </Button>
@@ -267,7 +267,7 @@ export default function OrderRoasts({ order, roasts, currentFilter = 'ALL' }: Or
                                   <Menu.Label>Status Actions</Menu.Label>
                                   <Menu.Item
                                     leftSection={<IconRotate2 size={14} />}
-                                    onClick={() => handleUpdateRoastStatus(roast.id, 'pending')}
+                                    onClick={() => handleUpdateRoastStatus(roast.id, 'PENDING')}
                                   >
                                     Revert to Pending
                                   </Menu.Item>

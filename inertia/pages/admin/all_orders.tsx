@@ -47,6 +47,33 @@ interface AllOrderProps {
   }
 }
 
+const NEXT_ORDER_STATUS: Partial<
+  Record<
+    OrderStatus,
+    {
+      next: OrderStatus
+      label: string
+      icon: React.ReactNode
+    }
+  >
+> = {
+  PENDING: {
+    next: 'ROASTING',
+    label: 'Mark as Roasting',
+    icon: <IconFlame size={14} color="var(--mantine-color-coffee-6)" />,
+  },
+  ROASTING: {
+    next: 'SHIPPED',
+    label: 'Mark as Shipped',
+    icon: <IconTruckDelivery size={14} />,
+  },
+  SHIPPED: {
+    next: 'DELIVERED',
+    label: 'Mark as Delivered',
+    icon: <IconCheck size={14} />,
+  },
+}
+
 export default function AllOrders({ orders, filters }: AllOrderProps) {
   const [isPending, startTransition] = useTransition()
   const [search, setSearch] = useState(filters?.search || '')
@@ -143,6 +170,8 @@ export default function AllOrders({ orders, filters }: AllOrderProps) {
   const rows = orders.data.map((order) => {
     const count = order.itemsCount ?? order.items?.length ?? 0
     const formattedDate = new Date(order.createdAt!.toString())
+    const nextStep = NEXT_ORDER_STATUS[order.status]
+    const canCancel = order.status !== 'DELIVERED' && order.status !== 'CANCELLED'
 
     return (
       <Table.Tr key={order.id} className={classes.tableRow}>
@@ -248,34 +277,31 @@ export default function AllOrders({ orders, filters }: AllOrderProps) {
                   View Roast Items
                 </Menu.Item>
 
-                <Menu.Divider />
-                <Menu.Label>Update Status</Menu.Label>
-                <Menu.Item
-                  leftSection={<IconFlame size={14} color="var(--mantine-color-coffee-6)" />}
-                  onClick={() => handleUpdateOrderStatus(order, 'ROASTING')}
-                >
-                  Mark as Roasting
-                </Menu.Item>
-                <Menu.Item
-                  leftSection={<IconTruckDelivery size={14} />}
-                  onClick={() => handleUpdateOrderStatus(order, 'SHIPPED')}
-                >
-                  Mark as Shipped
-                </Menu.Item>
-                <Menu.Item
-                  leftSection={<IconCheck size={14} />}
-                  onClick={() => handleUpdateOrderStatus(order, 'DELIVERED')}
-                >
-                  Mark as Delivered
-                </Menu.Item>
-                <Menu.Divider />
-                <Menu.Item
-                  color="red"
-                  leftSection={<IconX size={14} />}
-                  onClick={() => handleUpdateOrderStatus(order, 'CANCELLED')}
-                >
-                  Cancel Order
-                </Menu.Item>
+                {(nextStep || canCancel) && (
+                  <>
+                    <Menu.Divider />
+                    <Menu.Label>Update Status</Menu.Label>
+
+                    {nextStep && (
+                      <Menu.Item
+                        leftSection={nextStep.icon}
+                        onClick={() => handleUpdateOrderStatus(order, nextStep.next)}
+                      >
+                        {nextStep.label}
+                      </Menu.Item>
+                    )}
+
+                    {canCancel && (
+                      <Menu.Item
+                        color="red"
+                        leftSection={<IconX size={14} />}
+                        onClick={() => handleUpdateOrderStatus(order, 'CANCELLED')}
+                      >
+                        Cancel Order
+                      </Menu.Item>
+                    )}
+                  </>
+                )}
               </Menu.Dropdown>
             </Menu>
           </Group>

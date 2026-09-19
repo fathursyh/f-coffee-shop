@@ -1,6 +1,8 @@
 import { type OrderStatus } from '#database/migrations/1789290844108_create_orders_table'
 import Order from '#models/order'
+import RoastOrder from '#models/roast_order'
 import OrderTransformer from '#transformers/order_transformer'
+import RoastOrderTransformer from '#transformers/roast_order_transformer'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class AdminController {
@@ -48,8 +50,43 @@ export default class AdminController {
 
     return response.redirect().back()
   }
-  pendingRoast({ inertia }: HttpContext) {
-    return inertia.render('admin/pending_roast', {})
+
+  async pendingRoast({ request, inertia }: HttpContext) {
+    const page = request.input('page', 1)
+    const status = request.input('status', 'ALL')
+    const search = request.input('search', '')
+
+    const roastsQuery = RoastOrder.query()
+      .preload('orderItem', (orderItemQuery) => {
+        orderItemQuery.preload('order', (orderQuery) => {
+          orderQuery.preload('user')
+        })
+      })
+      .orderBy('created_at', 'desc')
+
+    if (status && status !== 'ALL') {
+      roastsQuery.where('status', status.toLowerCase())
+    }
+
+    if (search) {
+      roastsQuery.where((q) => {
+        q.whereILike('id', `%${search}%`).orWhereHas('orderItem', (itemQuery) => {
+          itemQuery.whereILike('coffee_name', `%${search}%`).orWhereHas('order', (orderQuery) => {
+            orderQuery.whereILike('id', `%${search}%`).orWhereILike('shipping_city', `%${search}%`)
+          })
+        })
+      })
+    }
+
+    const roasts = await roastsQuery.paginate(page, 15)
+
+    return inertia.render('admin/all_roast_orders', {
+      roasts: RoastOrderTransformer.paginate(roasts.all(), roasts.getMeta()),
+      filters: {
+        status,
+        search,
+      },
+    })
   }
 
   customerData({ inertia }: HttpContext) {

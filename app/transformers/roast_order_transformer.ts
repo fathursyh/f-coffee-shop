@@ -1,8 +1,12 @@
 import { BaseTransformer } from '@adonisjs/core/transformers'
 import type RoastOrder from '#models/roast_order'
+import OrderTransformer from '#transformers/order_transformer'
 
 export default class RoastOrderTransformer extends BaseTransformer<RoastOrder> {
   toObject() {
+    const orderItem = this.resource.$preloaded.orderItem ? this.resource.orderItem : null
+    const order = orderItem?.$preloaded.order ? orderItem.order : null
+
     return {
       ...this.pick(this.resource, [
         'id',
@@ -13,18 +17,19 @@ export default class RoastOrderTransformer extends BaseTransformer<RoastOrder> {
         'updatedAt',
       ]),
 
-      orderItem: this.resource.$preloaded.orderItem
+      orderItem: orderItem
         ? {
-            id: this.resource.orderItem.id,
-            orderId: this.resource.orderItem.orderId,
-            coffeeId: this.resource.orderItem.coffeeId,
-            coffeeName: this.resource.orderItem.coffeeName,
-            grind: this.resource.orderItem.grind,
-            roastType: this.resource.orderItem.roastType,
-            quantity: this.resource.orderItem.quantity,
-            weight: this.resource.orderItem.weight,
-            unitPrice: this.resource.orderItem.unitPrice,
-            subtotal: this.resource.orderItem.subtotal,
+            id: orderItem.id,
+            orderId: orderItem.orderId,
+            coffeeId: orderItem.coffeeId,
+            coffeeName: orderItem.coffeeName,
+            grind: orderItem.grind,
+            roastType: orderItem.roastType,
+            quantity: orderItem.quantity,
+            weight: orderItem.weight,
+            unitPrice: orderItem.unitPrice,
+            subtotal: orderItem.subtotal,
+            order: order ? new OrderTransformer(order).toObject() : undefined,
           }
         : undefined,
     }

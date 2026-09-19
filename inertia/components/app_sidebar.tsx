@@ -28,7 +28,7 @@ interface AppSidebarProps {
 export function AppSidebar({ user, onNavigate }: AppSidebarProps) {
   const { pendingCoffees } = usePage().props
 
-  const navSections: NavSection[] = useMemo(
+  const navSections = useMemo<NavSection[]>(
     () => [
       {
         title: 'Operations',
@@ -46,7 +46,7 @@ export function AppSidebar({ user, onNavigate }: AppSidebarProps) {
             link: undefined,
             links: [
               { label: 'All Orders', link: 'admin.orders' },
-              { label: 'Pending Roast', link: 'admin.roast' },
+              { label: 'Pending Roast', link: 'admin.roast_orders' },
             ],
           },
           {

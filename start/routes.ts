@@ -28,7 +28,7 @@ router
   .group(() => {
     router.get('dashboard', [controllers.Admin, 'dashboard']).as('dashboard')
     registerAdminOrderRoutes(router)
-    router.get('pendings', [controllers.Admin, 'pendingRoast']).as('roast')
+    router.get('roast-orders', [controllers.Admin, 'pendingRoast']).as('roast_orders')
     router.get('customers', [controllers.Admin, 'customerData']).as('customers')
     router.get('coffees', [controllers.Admin, 'coffeeData']).as('coffees')
     router.get('reports', [controllers.Admin, 'reports']).as('reports')
