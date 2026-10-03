@@ -192,6 +192,8 @@ export default function OrderCatalog({ coffee, onAddToCart }: OrderCatalogProps)
             const currentPrice = getBeanPrice(basePrice, selection.weight)
             const tastingNotesList = Array.isArray(bean.tastingNotes) ? bean.tastingNotes : []
 
+            const isOutOfStock = bean.stockQuantity !== undefined && bean.stockQuantity <= 0
+
             return (
               <Card key={bean.id} padding="md" radius="lg" bg="white" className={classes.card}>
                 <Stack gap="sm">
@@ -207,22 +209,34 @@ export default function OrderCatalog({ coffee, onAddToCart }: OrderCatalogProps)
                       {bean.roast} Roast
                     </Badge>
 
-                    {bean.badge && (
-                      <Badge
-                        variant="filled"
-                        color="coffee"
-                        size="xs"
-                        radius="sm"
-                        classNames={{ root: classes.specialBadge }}
-                      >
-                        {bean.badge}
-                      </Badge>
-                    )}
+                    <Group gap={4}>
+                      {isOutOfStock && (
+                        <Badge variant="filled" color="red" size="xs" radius="sm">
+                          Out of Stock
+                        </Badge>
+                      )}
+                      {bean.badge && (
+                        <Badge
+                          variant="filled"
+                          color="coffee"
+                          size="xs"
+                          radius="sm"
+                          classNames={{ root: classes.specialBadge }}
+                        >
+                          {bean.badge}
+                        </Badge>
+                      )}
+                    </Group>
                   </Group>
 
-                  {/* Title & Origin */}
+                  {/* Title & Origin with link to PDP */}
                   <Box mt={4}>
-                    <Title order={3} c="coffee.9" style={{ fontSize: '1.25rem', lineHeight: 1.25 }}>
+                    <Title
+                      order={3}
+                      c="coffee.9"
+                      style={{ fontSize: '1.25rem', lineHeight: 1.25, cursor: 'pointer' }}
+                      onClick={() => (window.location.href = `/coffees/${bean.slug || bean.id}`)}
+                    >
                       {bean.name}
                     </Title>
                     <Text size="xs" fw={600} c="coffee.6" mt={2}>
@@ -364,7 +378,7 @@ export default function OrderCatalog({ coffee, onAddToCart }: OrderCatalogProps)
                           variant="subtle"
                           color="coffee"
                           onClick={() => handleQuantityChange(bean.id, -1)}
-                          disabled={selection.quantity <= 1}
+                          disabled={isOutOfStock || selection.quantity <= 1}
                           aria-label="Decrease quantity"
                         >
                           <IconMinus size={14} />
@@ -383,6 +397,7 @@ export default function OrderCatalog({ coffee, onAddToCart }: OrderCatalogProps)
                           variant="subtle"
                           color="coffee"
                           onClick={() => handleQuantityChange(bean.id, 1)}
+                          disabled={isOutOfStock}
                           aria-label="Increase quantity"
                         >
                           <IconPlus size={14} />
@@ -391,13 +406,14 @@ export default function OrderCatalog({ coffee, onAddToCart }: OrderCatalogProps)
 
                       <Button
                         size="xs"
-                        color="coffee"
+                        color={isOutOfStock ? 'gray' : 'coffee'}
                         radius="md"
+                        disabled={isOutOfStock}
                         onClick={() => handleAddToCartClick(bean)}
                         leftSection={<IconPlus size={14} />}
                         classNames={{ root: classes.addBtn }}
                       >
-                        Add to Bag
+                        {isOutOfStock ? 'Out of Stock' : 'Add to Bag'}
                       </Button>
                     </Group>
                   </Group>

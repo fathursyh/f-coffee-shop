@@ -1,4 +1,5 @@
 import { Link } from '@adonisjs/inertia/react'
+import { router } from '@inertiajs/react'
 import {
   IconArrowLeft,
   IconClock,
@@ -9,6 +10,7 @@ import {
   IconCreditCard,
   IconChevronRight,
   IconShoppingBag,
+  IconBan,
 } from '@tabler/icons-react'
 import {
   Container,
@@ -261,23 +263,38 @@ export default function OrdersPage({ orders }: OrdersPageProps) {
                     </div>
 
                     <Group gap="xs">
-                      {!isPaid && order.payment?.paymentLink && (
+                      {order.status === 'PENDING' && (
                         <Button
-                          component="a"
-                          href={order.payment.paymentLink}
                           size="xs"
-                          color="orange"
-                          variant="filled"
+                          color="red"
+                          variant="subtle"
+                          leftSection={<IconBan size={14} />}
+                          onClick={() => {
+                            if (window.confirm('Are you sure you want to cancel this order? Stock will be returned.')) {
+                              router.post(`/orders/${order.id}/cancel`)
+                            }
+                          }}
                         >
-                          Pay Now
+                          Cancel
+                        </Button>
+                      )}
+
+                      {!isPaid && (
+                        <Button
+                          size="xs"
+                          color="teal"
+                          variant="light"
+                          onClick={() => router.post(`/payments/${order.id}/simulate-pay`)}
+                        >
+                          Pay
                         </Button>
                       )}
 
                       <Button
-                        component={Link}
-                        route="home"
-                        params={{ id: order.id }}
+                        component="a"
+                        href={`/orders/${order.id}`}
                         variant="light"
+                        color="coffee"
                         size="xs"
                         rightSection={<IconChevronRight size={14} />}
                       >

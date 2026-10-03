@@ -9,6 +9,7 @@ import {
   Group,
   LoadingOverlay,
   Menu,
+  Modal,
   Pagination,
   Paper,
   Select,
@@ -78,6 +79,10 @@ export default function AllOrders({ orders, filters }: AllOrderProps) {
   const [isPending, startTransition] = useTransition()
   const [search, setSearch] = useState(filters?.search || '')
   const [statusFilter, setStatusFilter] = useState<string | null>(filters?.status || 'ALL')
+  const [shippingOrder, setShippingOrder] = useState<Data.Order | null>(null)
+  const [courierName, setCourierName] = useState('DHL Express')
+  const [trackingNumber, setTrackingNumber] = useState('')
+  const [isDispatching, setIsDispatching] = useState(false)
 
   const applyFilters = (newParams: { search?: string; status?: string | null; page?: number }) => {
     const query = {
@@ -117,12 +122,39 @@ export default function AllOrders({ orders, filters }: AllOrderProps) {
   const handleUpdateOrderStatus = (order: Data.Order, nextStatus: OrderStatus) => {
     if (nextStatus === order.status) return
     if (nextStatus === 'CANCELLED' && !confirm('Cancel this order?')) return
+    if (nextStatus === 'SHIPPED') {
+      setShippingOrder(order)
+      setCourierName('DHL Express')
+      setTrackingNumber(`TRK-${Date.now().toString().slice(-6)}`)
+      return
+    }
     router.patch(
       urlFor('admin.orders.updateStatus', { id: order.id }),
       { status: nextStatus },
       {
         preserveScroll: true,
         only: ['orders'],
+      }
+    )
+  }
+
+  const handleConfirmShipment = () => {
+    if (!shippingOrder) return
+    setIsDispatching(true)
+    router.patch(
+      urlFor('admin.orders.updateStatus', { id: shippingOrder.id }),
+      {
+        status: 'SHIPPED',
+        courierName: courierName.trim() || undefined,
+        trackingNumber: trackingNumber.trim() || undefined,
+      },
+      {
+        preserveScroll: true,
+        only: ['orders'],
+        onFinish: () => {
+          setIsDispatching(false)
+          setShippingOrder(null)
+        },
       }
     )
   }
@@ -433,6 +465,60 @@ export default function AllOrders({ orders, filters }: AllOrderProps) {
           </Paper>
         </Stack>
       </Container>
+
+      {/* Dispatch / Shipping Modal */}
+      <Modal
+        opened={Boolean(shippingOrder)}
+        onClose={() => setShippingOrder(null)}
+        title={
+          <Group gap="xs">
+            <ThemeIcon color="coffee" size="sm" variant="light">
+              <IconTruckDelivery size={16} />
+            </ThemeIcon>
+            <Text fw={700} c="coffee.9">
+              Dispatch Order #{shippingOrder?.id}
+            </Text>
+          </Group>
+        }
+        size="md"
+        centered
+      >
+        <Stack gap="md">
+          <Text size="sm" c="dimmed">
+            Enter courier service details and tracking number to mark this order as shipped.
+          </Text>
+
+          <TextInput
+            label="Courier Partner"
+            placeholder="e.g. DHL Express, FedEx, UPS"
+            value={courierName}
+            onChange={(e) => setCourierName(e.currentTarget.value)}
+            required
+          />
+
+          <TextInput
+            label="Tracking Number"
+            placeholder="e.g. TRK-8912384"
+            value={trackingNumber}
+            onChange={(e) => setTrackingNumber(e.currentTarget.value)}
+            required
+          />
+
+          <Group justify="flex-end" mt="md">
+            <Button variant="default" onClick={() => setShippingOrder(null)}>
+              Cancel
+            </Button>
+            <Button
+              color="coffee"
+              loading={isDispatching}
+              onClick={handleConfirmShipment}
+              leftSection={<IconCheck size={16} />}
+            >
+              Confirm Dispatch
+            </Button>
+          </Group>
+        </Stack>
+      </Modal>
     </Box>
   )
 }

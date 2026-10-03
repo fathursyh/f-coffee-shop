@@ -1,7 +1,7 @@
 import { type UserRole } from '#database/migrations/1761885935168_create_users_table'
 import type { HttpContext } from '@adonisjs/core/http'
 import type { NextFn } from '@adonisjs/core/types/http'
-import { ToastEnum } from '../enums/toast_enum.ts'
+import { ToastEnum } from '../enums/toast_enum.js'
 
 type AuthorizationOptions = { permissions: string[] } | { role: UserRole }
 

@@ -1,7 +1,7 @@
 import User from '#models/user'
 import { loginValidator } from '#validators/user'
 import type { HttpContext } from '@adonisjs/core/http'
-import { ToastEnum } from '../enums/toast_enum.ts'
+import { ToastEnum } from '../enums/toast_enum.js'
 
 export default class SessionController {
   async create({ inertia }: HttpContext) {

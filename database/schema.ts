@@ -33,7 +33,7 @@ export class CartSchema extends BaseModel {
 }
 
 export class CoffeeSchema extends BaseModel {
-  static $columns = ['badge', 'basePrice250G', 'bestFor', 'createdAt', 'description', 'elevation', 'id', 'name', 'origin', 'process', 'roast', 'roastLevel', 'subregion', 'tastingNotes', 'updatedAt'] as const
+  static $columns = ['badge', 'basePrice250G', 'bestFor', 'createdAt', 'description', 'elevation', 'id', 'imageUrl', 'isActive', 'name', 'origin', 'process', 'roast', 'roastLevel', 'slug', 'stockQuantity', 'subregion', 'tastingNotes', 'updatedAt'] as const
   $columns = CoffeeSchema.$columns
   @column()
   declare badge: string | null
@@ -50,6 +50,10 @@ export class CoffeeSchema extends BaseModel {
   @column({ isPrimary: true })
   declare id: string
   @column()
+  declare imageUrl: string | null
+  @column()
+  declare isActive: boolean
+  @column()
   declare name: string
   @column()
   declare origin: string
@@ -59,6 +63,10 @@ export class CoffeeSchema extends BaseModel {
   declare roast: string
   @column()
   declare roastLevel: string
+  @column()
+  declare slug: string | null
+  @column()
+  declare stockQuantity: number
   @column()
   declare subregion: string | null
   @column()
@@ -97,12 +105,16 @@ export class OrderItemSchema extends BaseModel {
 }
 
 export class OrderSchema extends BaseModel {
-  static $columns = ['createdAt', 'id', 'shippingAddress', 'shippingCity', 'shippingCost', 'shippingCountry', 'shippingPhone', 'shippingPostCode', 'status', 'subtotal', 'totalAmount', 'updatedAt', 'userId'] as const
+  static $columns = ['courierName', 'createdAt', 'id', 'roastDate', 'shippingAddress', 'shippingCity', 'shippingCost', 'shippingCountry', 'shippingPhone', 'shippingPostCode', 'status', 'subtotal', 'totalAmount', 'trackingNumber', 'updatedAt', 'userId'] as const
   $columns = OrderSchema.$columns
+  @column()
+  declare courierName: string | null
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
   @column({ isPrimary: true })
   declare id: number
+  @column.dateTime()
+  declare roastDate: DateTime | null
   @column()
   declare shippingAddress: string
   @column()
@@ -121,6 +133,8 @@ export class OrderSchema extends BaseModel {
   declare subtotal: string
   @column()
   declare totalAmount: string
+  @column()
+  declare trackingNumber: string | null
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
   @column()

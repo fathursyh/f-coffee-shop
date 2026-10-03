@@ -11,4 +11,8 @@ export default class UserInfoPolicy extends BasePolicy {
   update(user: User, userInfo: UserInfo): AuthorizerResponse {
     return user.id === userInfo.userId
   }
+
+  delete(user: User, userInfo: UserInfo): AuthorizerResponse {
+    return user.id === userInfo.userId
+  }
 }

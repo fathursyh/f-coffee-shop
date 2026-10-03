@@ -58,7 +58,7 @@ export default function PendingRoast({ roasts, filters }: PendingRoastProps) {
     }
 
     startTransition(() => {
-      router.get(client.urlFor('admin.pending_roast'), query, {
+      router.get(client.urlFor('admin.roast_orders'), query, {
         preserveState: true,
         preserveScroll: true,
         only: ['roasts', 'filters'],

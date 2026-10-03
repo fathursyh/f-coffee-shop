@@ -2,8 +2,8 @@ import type { RoastType } from '#database/migrations/1789048820298_create_carts_
 import { CartSchema } from '#database/schema'
 import { belongsTo, column } from '@adonisjs/lucid/orm'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
-import User from './user.ts'
-import Coffee from './coffee.ts'
+import User from '#models/user'
+import Coffee from '#models/coffee'
 
 export default class Cart extends CartSchema {
   @column()

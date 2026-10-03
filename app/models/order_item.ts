@@ -1,11 +1,11 @@
 import { OrderItemSchema } from '#database/schema'
 import { belongsTo, column, hasOne } from '@adonisjs/lucid/orm'
 import type { BelongsTo, HasOne } from '@adonisjs/lucid/types/relations'
-import Order from './order.ts'
-import Coffee from './coffee.ts'
+import Order from '#models/order'
+import Coffee from '#models/coffee'
 import { compose } from '@adonisjs/core/helpers'
 import { omitColumns } from '#database/schema_helper'
-import RoastOrder from './roast_order.ts'
+import RoastOrder from '#models/roast_order'
 
 export default class OrderItem extends compose(
   OrderItemSchema,

@@ -2,6 +2,7 @@ import { CoffeeSchema } from '#database/schema'
 import { compose } from '@adonisjs/core/helpers'
 import { column } from '@adonisjs/lucid/orm'
 import { omitColumns } from '#database/schema_helper'
+import type { ModelAttributes } from '@adonisjs/lucid/types/model'
 
 export default class Coffee extends compose(
   CoffeeSchema,
@@ -25,3 +26,5 @@ export default class Coffee extends compose(
   })
   declare tastingNotes: string[]
 }
+
+export type CoffeeAttributes = ModelAttributes<Coffee>

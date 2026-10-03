@@ -1,6 +1,6 @@
 import type Order from '#models/order'
 import { BaseTransformer } from '@adonisjs/core/transformers'
-import UserTransformer from './user_transformer.ts'
+import UserTransformer from './user_transformer.js'
 
 export default class OrderTransformer extends BaseTransformer<Order> {
   toObject() {

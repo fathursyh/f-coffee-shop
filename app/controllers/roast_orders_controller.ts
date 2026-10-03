@@ -4,7 +4,7 @@ import Order from '#models/order'
 import OrderTransformer from '#transformers/order_transformer'
 import RoastOrderTransformer from '#transformers/roast_order_transformer'
 import { updateRoastOrderStatusValidator } from '#validators/roast_order'
-import { ToastEnum } from '../enums/toast_enum.ts'
+import { ToastEnum } from '../enums/toast_enum.js'
 
 export default class RoastOrdersController {
   /**

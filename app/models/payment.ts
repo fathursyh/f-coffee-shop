@@ -1,8 +1,8 @@
 import { PaymentSchema } from '#database/schema'
 import { belongsTo, column } from '@adonisjs/lucid/orm'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
-import User from './user.ts'
-import Order from './order.ts'
+import User from '#models/user'
+import Order from '#models/order'
 import { compose } from '@adonisjs/core/helpers'
 import { omitColumns } from '#database/schema_helper'
 

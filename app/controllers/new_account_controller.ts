@@ -1,7 +1,7 @@
 import User from '#models/user'
 import { signupValidator } from '#validators/user'
 import type { HttpContext } from '@adonisjs/core/http'
-import { ToastEnum } from '../enums/toast_enum.ts'
+import { ToastEnum } from '../enums/toast_enum.js'
 
 export default class NewAccountController {
   async create({ inertia }: HttpContext) {
